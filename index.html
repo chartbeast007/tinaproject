@@ -1,412 +1,496 @@
-
-```
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expense Tracker</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/tabler-icons.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f5f5f5;
-            color: #333;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .header {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        .header h1 {
-            font-size: 24px;
-        }
-        .guardian-access {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .guardian-access input {
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        .guardian-access button {
-            padding: 8px 16px;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .guardian-access button:hover {
-            background: #0056b3;
-        }
-        .logout-btn {
-            background: #dc3545;
-            padding: 8px 16px;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .logout-btn:hover {
-            background: #c82333;
-        }
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #ddd;
-        }
-        .tab-button {
-            padding: 12px 20px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            border-bottom: 3px solid transparent;
-            color: #666;
-        }
-        .tab-button.active {
-            color: #007bff;
-            border-bottom-color: #007bff;
-        }
-        .tab-content {
-            display: none;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        .tab-content.active {
-            display: block;
-        }
-        .button-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        .category-btn, .amount-btn {
-            padding: 16px;
-            border: 2px solid #ddd;
-            background: white;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 500;
-        }
-        .category-btn:hover, .amount-btn:hover {
-            border-color: #007bff;
-        }
-        .category-btn.selected, .amount-btn.selected {
-            background: #007bff;
-            color: white;
-            border-color: #007bff;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        .modal.active {
-            display: flex;
-        }
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            max-width: 500px;
-            width: 90%;
-        }
-        .modal-content h2 {
-            margin-bottom: 20px;
-        }
-        .modal-content button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        #submitBtn {
-            background: #28a745;
-            color: white;
-        }
-        #submitBtn:hover:not(:disabled) {
-            background: #218838;
-        }
-        #submitBtn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-        .close-btn {
-            background: #6c757d;
-            color: white;
-        }
-        .close-btn:hover {
-            background: #5a6268;
-        }
-        .expense-list {
-            margin-top: 20px;
-        }
-        .expense-item {
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .expense-item.pending {
-            background: #fff3cd;
-            border-color: #ffc107;
-        }
-        .expense-item.approved {
-            background: #d4edda;
-            border-color: #28a745;
-        }
-        .alert {
-            background: #f8d7da;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
-            padding: 12px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-        }
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        .stat-card {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-        }
-        .stat-card .label {
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 8px;
-        }
-        .stat-card .value {
-            font-size: 28px;
-            font-weight: bold;
-            color: #007bff;
-        }
-        .vendor-list {
-            margin-top: 15px;
-        }
-        .vendor-item {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .vendor-item button {
-            padding: 4px 8px;
-            background: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-        .settings-form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        .settings-form label {
-            font-weight: 500;
-        }
-        .settings-form input, .settings-form select {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        .settings-form button {
-            padding: 12px;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .settings-form button:hover {
-            background: #0056b3;
-        }
-        .add-btn {
-            background: #28a745;
-            color: white;
-        }
-        .add-btn:hover {
-            background: #218838;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expense Tracker</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #ffffff; --bg2: #f4f4f2; --bg3: #ebebea;
+      --text: #1a1a19; --text2: #6b6b67; --text3: #9b9b97;
+      --border: rgba(0,0,0,0.1); --border2: rgba(0,0,0,0.18);
+      --green: #1D9E75; --blue: #378ADD; --red: #D85A30;
+      --purple: #7F77DD; --amber: #BA7517; --gray: #888780;
+      --radius: 8px; --radius-lg: 12px; --radius-xl: 16px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1c1c1a; --bg2: #272725; --bg3: #313130;
+        --text: #f0f0ee; --text2: #a0a09c; --text3: #6b6b67;
+        --border: rgba(255,255,255,0.1); --border2: rgba(255,255,255,0.18);
+      }
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg3); color: var(--text); min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 2rem 1rem; }
+    .app { width: 100%; max-width: 480px; background: var(--bg); border-radius: var(--radius-xl); overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+    .app-header { padding: 1.25rem 1.25rem 0; display: flex; align-items: center; gap: 10px; }
+    .app-header h1 { font-size: 18px; font-weight: 500; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+    .auth-screen { padding: 2rem 1.25rem; text-align: center; }
+    .auth-screen h2 { font-size: 20px; font-weight: 500; margin-bottom: 8px; }
+    .auth-screen p { font-size: 14px; color: var(--text2); margin-bottom: 1.5rem; }
+    .auth-input { width: 100%; padding: 13px 14px; background: var(--bg2); border: 1.5px solid transparent; border-radius: var(--radius); font-size: 15px; color: var(--text); font-family: inherit; margin-bottom: 10px; outline: none; }
+    .auth-input:focus { border-color: var(--text); }
+    .auth-btn { width: 100%; padding: 13px; background: var(--text); color: var(--bg); border: none; border-radius: var(--radius); font-size: 15px; font-weight: 500; cursor: pointer; font-family: inherit; }
+    .auth-btn:hover { opacity: 0.85; }
+    .auth-error { font-size: 13px; color: var(--red); margin-top: 8px; min-height: 18px; }
+    .auth-switch { font-size: 13px; color: var(--text2); margin-top: 1rem; }
+    .auth-switch span { color: var(--text); text-decoration: underline; cursor: pointer; }
+    .tab-bar { display: flex; border-bottom: 0.5px solid var(--border); margin-top: 1rem; }
+    .tab-button { flex: 1; padding: 13px 8px; background: none; border: none; border-bottom: 2.5px solid transparent; font-size: 13px; font-weight: 500; color: var(--text2); cursor: pointer; transition: color 0.15s, border-color 0.15s; font-family: inherit; }
+    .tab-button.active { color: var(--text); border-bottom-color: var(--text); }
+    .tab-button i { font-size: 16px; vertical-align: -3px; margin-right: 4px; }
+    .tab-content { display: none; padding: 1.25rem; }
+    .tab-content.active { display: block; }
+    .balance-card { background: var(--bg2); border-radius: var(--radius-lg); padding: 1.5rem; text-align: center; margin-bottom: 1.25rem; }
+    .balance-label { font-size: 13px; color: var(--text2); margin-bottom: 6px; }
+    .balance-amount { font-size: 44px; font-weight: 500; letter-spacing: -1px; }
+    .balance-sub { font-size: 13px; color: var(--text2); margin-top: 4px; }
+    .add-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 17px; background: var(--text); color: var(--bg); border: none; border-radius: var(--radius-lg); font-size: 17px; font-weight: 500; cursor: pointer; margin-bottom: 1.5rem; transition: opacity 0.15s; font-family: inherit; }
+    .add-btn:hover { opacity: 0.82; }
+    .add-btn i { font-size: 22px; }
+    .section-label { font-size: 12px; font-weight: 500; color: var(--text2); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+    .expense-item { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 0.5px solid var(--border); }
+    .expense-item:last-child { border-bottom: none; }
+    .expense-icon { width: 40px; height: 40px; border-radius: var(--radius); background: var(--bg2); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .expense-name { font-size: 15px; font-weight: 500; }
+    .expense-time { font-size: 12px; color: var(--text3); margin-top: 2px; }
+    .expense-amount { font-size: 15px; font-weight: 500; }
+    .badge { display: inline-block; font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 20px; margin-left: 6px; vertical-align: middle; }
+    .badge-pending { background: #FAEEDA; color: #633806; }
+    .badge-approved { background: #EAF3DE; color: #27500A; }
+    .badge-recurring { background: #E6F1FB; color: #0C447C; }
+    .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: flex-end; justify-content: center; padding: 1rem; }
+    .modal-backdrop.active { display: flex; }
+    .modal { background: var(--bg); border-radius: var(--radius-xl); padding: 1.5rem; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; animation: slideUp 0.25s ease; }
+    @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+    .modal-title { font-size: 18px; font-weight: 500; }
+    .modal-close { background: var(--bg2); border: none; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; color: var(--text2); }
+    .modal-section-label { font-size: 13px; color: var(--text2); margin-bottom: 10px; margin-top: 4px; }
+    .vendor-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 1rem; max-height: 180px; overflow-y: auto; }
+    .vendor-btn { display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: var(--bg2); border: 1.5px solid transparent; border-radius: var(--radius); cursor: pointer; font-size: 13px; color: var(--text); transition: border-color 0.15s; font-family: inherit; text-align: left; }
+    .vendor-btn i { font-size: 18px; flex-shrink: 0; }
+    .vendor-btn.selected { border-color: var(--text); background: var(--bg); }
+    .vendor-recurring-tag { font-size: 10px; color: var(--blue); margin-left: auto; flex-shrink: 0; }
+    .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 1rem; }
+    .category-btn { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 8px; background: var(--bg2); border: 1.5px solid transparent; border-radius: var(--radius); cursor: pointer; font-size: 13px; color: var(--text); transition: border-color 0.15s; font-family: inherit; }
+    .category-btn i { font-size: 24px; }
+    .category-btn.selected { border-color: var(--text); background: var(--bg); }
+    .amount-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+    .amount-btn { padding: 13px 8px; background: var(--bg2); border: 1.5px solid transparent; border-radius: var(--radius); font-size: 16px; font-weight: 500; cursor: pointer; color: var(--text); transition: border-color 0.15s; font-family: inherit; }
+    .amount-btn.selected { border-color: var(--text); background: var(--bg); }
+    .custom-input { width: 100%; padding: 12px 14px; background: var(--bg2); border: 1.5px solid transparent; border-radius: var(--radius); font-size: 15px; color: var(--text); font-family: inherit; outline: none; margin-bottom: 1rem; }
+    .custom-input:focus { border-color: var(--text); }
+    .recurring-toggle { display: flex; align-items: center; gap: 10px; padding: 12px; background: var(--bg2); border-radius: var(--radius); margin-bottom: 1.25rem; cursor: pointer; }
+    .toggle-sw { width: 40px; height: 22px; background: var(--border2); border-radius: 11px; position: relative; transition: background 0.2s; flex-shrink: 0; }
+    .toggle-sw.on { background: var(--green); }
+    .toggle-sw::after { content: ''; position: absolute; width: 18px; height: 18px; background: white; border-radius: 50%; top: 2px; left: 2px; transition: left 0.2s; }
+    .toggle-sw.on::after { left: 20px; }
+    .submit-btn { width: 100%; padding: 15px; background: var(--text); color: var(--bg); border: none; border-radius: var(--radius); font-size: 16px; font-weight: 500; cursor: pointer; transition: opacity 0.15s; font-family: inherit; }
+    .submit-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .submit-btn:not(:disabled):hover { opacity: 0.82; }
+    .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 1.5rem; }
+    .stat-card { background: var(--bg2); border-radius: var(--radius); padding: 1rem; }
+    .stat-label { font-size: 12px; color: var(--text2); margin-bottom: 4px; }
+    .stat-value { font-size: 22px; font-weight: 500; }
+    .alert-box { background: #FAEEDA; border: 0.5px solid #FAC775; border-radius: var(--radius); padding: 12px 14px; font-size: 13px; color: #633806; display: flex; gap: 10px; align-items: flex-start; margin-bottom: 1rem; }
+    .alert-box i { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .cat-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid var(--border); }
+    .cat-row:last-child { border-bottom: none; }
+    .cat-icon { font-size: 18px; width: 24px; text-align: center; flex-shrink: 0; }
+    .cat-name { flex: 1; font-size: 14px; }
+    .cat-bar-wrap { width: 80px; height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; flex-shrink: 0; }
+    .cat-bar { height: 100%; border-radius: 3px; }
+    .cat-amt { font-size: 14px; font-weight: 500; min-width: 44px; text-align: right; }
+    .g-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
+    .g-item:last-child { border-bottom: none; }
+    .g-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .g-info { flex: 1; }
+    .g-name { font-size: 14px; font-weight: 500; }
+    .g-meta { font-size: 12px; color: var(--text3); margin-top: 2px; }
+    .g-amt { font-size: 14px; font-weight: 500; text-align: right; }
+    .g-actions { display: flex; gap: 6px; }
+    .g-btn { padding: 5px 10px; border: none; border-radius: var(--radius); font-size: 12px; font-weight: 500; cursor: pointer; font-family: inherit; }
+    .g-approve { background: #EAF3DE; color: #27500A; }
+    .g-reject { background: #FCEBEB; color: #501313; }
+    .settings-section { margin-bottom: 1.5rem; }
+    .settings-section h3 { font-size: 15px; font-weight: 500; margin-bottom: 8px; }
+    .settings-section p { font-size: 13px; color: var(--text2); margin-bottom: 12px; }
+    .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .field { flex: 1; min-width: 120px; padding: 11px 13px; background: var(--bg2); border: 1.5px solid transparent; border-radius: var(--radius); font-size: 15px; color: var(--text); font-family: inherit; outline: none; }
+    .field:focus { border-color: var(--text); }
+    .save-btn { padding: 11px 16px; background: var(--text); color: var(--bg); border: none; border-radius: var(--radius); font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit; white-space: nowrap; }
+    .save-btn:hover { opacity: 0.85; }
+    .success-msg { font-size: 13px; color: var(--green); margin-top: 8px; display: none; }
+    .vendor-list-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid var(--border); }
+    .vendor-list-item:last-child { border-bottom: none; }
+    .vl-icon { font-size: 20px; width: 28px; text-align: center; }
+    .vl-info { flex: 1; }
+    .vl-name { font-size: 14px; font-weight: 500; }
+    .vl-cat { font-size: 12px; color: var(--text2); }
+    .vl-remove { background: none; border: none; color: var(--text3); font-size: 18px; cursor: pointer; padding: 4px; }
+    .vl-remove:hover { color: var(--red); }
+    .divider { height: 0.5px; background: var(--border); margin: 1.25rem 0; }
+    .logout-btn { width: 100%; padding: 13px; background: none; border: 1.5px solid var(--border2); border-radius: var(--radius); font-size: 14px; color: var(--text2); cursor: pointer; font-family: inherit; margin-top: 0.5rem; }
+    .logout-btn:hover { background: var(--bg2); }
+    .empty-state { text-align: center; padding: 2rem 1rem; color: var(--text3); font-size: 14px; }
+    .empty-state i { font-size: 32px; display: block; margin-bottom: 8px; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>💰 Expense Tracker</h1>
-            <div class="guardian-access">
-                <input type="password" id="guardianPassword" placeholder="Guardian password">
-                <button onclick="loginGuardian()">Login as Guardian</button>
-                <button class="logout-btn" id="logoutBtn" style="display: none;" onclick="logoutGuardian()">Logout</button>
-            </div>
-        </div>
+<div class="app">
+  <div class="app-header"><div class="dot"></div><h1>Expense Tracker</h1></div>
 
-        <div class="tabs">
-            <button class="tab-button active" onclick="switchTab('elderly')">Elderly User</button>
-            <button class="tab-button" id="guardianTabBtn" onclick="switchTab('guardian')" style="display: none;">Guardian Dashboard</button>
-            <button class="tab-button" id="settingsTabBtn" onclick="switchTab('settings')" style="display: none;">Settings</button>
-            <button class="tab-button" id="pendingTabBtn" onclick="switchTab('pending')" style="display: none;">Pending Approvals</button>
-        </div>
+  <!-- Elderly Auth -->
+  <div id="elderlyAuth">
+    <div class="auth-screen">
+      <h2>Welcome</h2>
+      <p>Enter your PIN to view your spending</p>
+      <input class="auth-input" type="password" id="elderlyPin" placeholder="Enter PIN" maxlength="6" onkeydown="if(event.key==='Enter')elderlyLogin()" />
+      <button class="auth-btn" onclick="elderlyLogin()">Sign in</button>
+      <div class="auth-error" id="elderlyError"></div>
+      <div class="auth-switch">Guardian? <span onclick="showGuardianAuth()">Sign in here</span></div>
+    </div>
+  </div>
 
-        <!-- Elderly User Interface -->
-        <div id="elderly" class="tab-content active">
-            <h2>Add Expense</h2>
-            <button onclick="openExpenseModal()" style="padding: 12px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px;">+ Add Expense</button>
-            
-            <div class="expense-list">
-                <h3>Recent Expenses</h3>
-                <div id="elderlyExpenseList"></div>
-            </div>
-        </div>
+  <!-- Guardian Auth -->
+  <div id="guardianAuth" style="display:none;">
+    <div class="auth-screen">
+      <h2>Guardian Access</h2>
+      <p>Enter your guardian password</p>
+      <input class="auth-input" type="password" id="guardianPass" placeholder="Enter password" onkeydown="if(event.key==='Enter')guardianLogin()" />
+      <button class="auth-btn" onclick="guardianLogin()">Sign in</button>
+      <div class="auth-error" id="guardianError"></div>
+      <div class="auth-switch"><span onclick="showElderlyAuth()">← Back</span></div>
+    </div>
+  </div>
 
-        <!-- Guardian Dashboard -->
-        <div id="guardian" class="tab-content">
-            <h2>Guardian Dashboard</h2>
-            <div id="guardianAlert"></div>
-            
-            <div class="dashboard-grid">
-                <div class="stat-card">
-                    <div class="label">Total Spent</div>
-                    <div class="value" id="totalSpent">$0</div>
-                </div>
-                <div class="stat-card">
-                    <div class="label">Transactions</div>
-                    <div class="value" id="transactionCount">0</div>
-                </div>
-                <div class="stat-card">
-                    <div class="label">Largest Purchase</div>
-                    <div class="value" id="largestPurchase">$0</div>
-                </div>
-                <div class="stat-card">
-                    <div class="label">Pending Count</div>
-                    <div class="value" id="pendingCount">0</div>
-                </div>
-            </div>
+  <!-- Elderly App -->
+  <div id="elderlyApp" style="display:none;">
+    <div class="tab-bar">
+      <button class="tab-button active" onclick="switchTab('spending',this,'elderly')"><i class="ti ti-home"></i>My Spending</button>
+      <button class="tab-button" onclick="switchTab('myAccount',this,'elderly')"><i class="ti ti-user"></i>Account</button>
+    </div>
+    <div id="spending" class="tab-content active">
+      <div class="balance-card">
+        <div class="balance-label">This month's spending</div>
+        <div class="balance-amount" id="totalDisplay">$0</div>
+        <div class="balance-sub" id="countDisplay">No expenses yet</div>
+      </div>
+      <button class="add-btn" onclick="openModal()"><i class="ti ti-plus"></i>Add an expense</button>
+      <div class="section-label">Recent expenses</div>
+      <div id="expenseList"><div class="empty-state"><i class="ti ti-receipt"></i>Tap "Add an expense" to get started</div></div>
+    </div>
+    <div id="myAccount" class="tab-content">
+      <div class="section-label">Account</div>
+      <p style="font-size:14px;color:var(--text2);margin-bottom:1rem;">Logged in as <strong style="color:var(--text);">User</strong></p>
+      <button class="logout-btn" onclick="logout('elderly')"><i class="ti ti-logout" style="vertical-align:-2px;margin-right:6px;"></i>Sign out</button>
+    </div>
+  </div>
 
-            <h3>All Expenses</h3>
-            <div id="guardianExpenseList"></div>
-        </div>
-
-        <!-- Settings Tab -->
-        <div id="settings" class="tab-content">
-            <h2>Guardian Settings</h2>
-            <div class="settings-form">
-                <div>
-                    <label>Alert Threshold ($)</label>
-                    <input type="number" id="alertThreshold" min="50" step="50" value="500">
-                </div>
-
-                <div>
-                    <label>Pre-approved Vendors</label>
-                    <div style="margin-top: 10px;">
-                        <input type="text" id="newVendor" placeholder="Enter vendor name" style="width: calc(100% - 100px); margin-right: 10px;">
-                        <button class="add-btn" onclick="addVendor()" style="width: 80px;">Add</button>
-                    </div>
-                    <div class="vendor-list" id="vendorList"></div>
-                </div>
-
-                <button onclick="saveSettings()" style="background: #28a745;">Save Settings</button>
-            </div>
-        </div>
-
-        <!-- Pending Approvals Tab -->
-        <div id="pending" class="tab-content">
-            <h2>Pending Approvals</h2>
-            <div id="pendingList"></div>
-        </div>
+  <!-- Guardian App -->
+  <div id="guardianApp" style="display:none;">
+    <div class="tab-bar">
+      <button class="tab-button active" onclick="switchTab('dashboard',this,'guardian')"><i class="ti ti-shield"></i>Dashboard</button>
+      <button class="tab-button" onclick="switchTab('pending',this,'guardian')"><i class="ti ti-clock"></i>Pending<span id="pendingBadge" style="color:var(--red);margin-left:3px;"></span></button>
+      <button class="tab-button" onclick="switchTab('gSettings',this,'guardian')"><i class="ti ti-settings"></i>Settings</button>
     </div>
 
-    <!-- Expense Modal -->
-    <div id="expenseModal" class="modal">
-        <div class="modal-content">
-            <h2>Add Expense</h2>
-            
-            <div>
-                <label style="display: block; margin-bottom: 10px; font-weight: 500;">Category</label>
-                <div class="button-grid">
-                    <button class="category-btn" onclick="selectCategory('Food')">🍔 Food</button>
-                    <button class="category-btn" onclick="selectCategory('Transport')">🚗 Transport</button>
-                    <button class="category-btn" onclick="selectCategory('Health')">🏥 Health</button>
-                    <button class="category-btn" onclick="selectCategory('Shopping')">🛍️ Shopping</button>
-                    <button class="category-btn" onclick="selectCategory('Bills')">📄 Bills</button>
-                    <button class="category-btn" onclick="selectCategory('Other')">📌 Other</button>
-                </div>
-            </div>
+    <div id="dashboard" class="tab-content active">
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-label">Total this month</div><div class="stat-value" id="g-total">$0</div></div>
+        <div class="stat-card"><div class="stat-label">Transactions</div><div class="stat-value" id="g-count">0</div></div>
+        <div class="stat-card"><div class="stat-label">Largest spend</div><div class="stat-value" id="g-largest">$0</div></div>
+        <div class="stat-card"><div class="stat-label">Most frequent</div><div class="stat-value" style="font-size:16px;" id="g-frequent">—</div></div>
+      </div>
+      <div id="alertArea"></div>
+      <div style="margin-bottom:1.5rem;"><div class="section-label">By category</div><div id="g-categories"><div class="empty-state" style="padding:1rem;">No data yet</div></div></div>
+      <div><div class="section-label">All transactions</div><div id="g-list"><div class="empty-state" style="padding:1rem;">No transactions yet</div></div></div>
+      <button class="logout-btn" style="margin-top:1rem;" onclick="logout('guardian')"><i class="ti ti-logout" style="vertical-align:-2px;margin-right:6px;"></i>Sign out</button>
+    </div>
 
-            <div>
-                <label style="display: block; margin-bottom: 10px; font-weight: 500;">Vendor (optional)</label>
-                <select id="vendorSelect" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
-                    <option value="">Custom vendor</option>
-                </select>
-                <input type="text" id="customVendor" placeholder="Enter vendor name" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; margin-top: 10px;">
-            </div>
+    <div id="pending" class="tab-content">
+      <div class="section-label">Awaiting approval</div>
+      <div id="pendingList"><div class="empty-state"><i class="ti ti-check"></i>No pending expenses</div></div>
+    </div>
 
-            <div>
-                <label style="display: block; margin-bottom: 10px; font-weight: 500;">Amount</label>
-                <div class="button-grid">
-                    <button class="amount-btn" onclick="selectAmount(20)">$20</button>
-                    <button class="amount-btn" onclick="selectAmount(50)">$50</button>
-                    <button class="amount-btn" onclick="selectAmount(100)">$100</button>
-                    <button class="amount-btn" onclick="selectAmount(200)">$200</button>
-                </div>
-                <input type="number" id="customAmount" placeholder="Custom amount" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; margin-top: 10px;">
-            </div>
+    <div id="gSettings" class="tab-content">
+      <div class="settings-section">
+        <h3>Alert threshold</h3>
+        <p>Expenses above this amount require your approval before they count.</p>
+        <div class="row">
+          <span style="font-size:18px;font-weight:500;">$</span>
+          <input class="field" type="number" id="thresholdInput" min="1" style="max-width:140px;" />
+          <button class="save-btn" onclick="saveThreshold()">Save</button>
+        </div>
+        <div class="success-msg" id="thresholdMsg">Saved!</div>
+      </div>
+      <div class="divider"></div>
+      <div class="settings-section">
+        <h3>Pre-approved vendors</h3>
+        <p>Expenses from these vendors are automatically approved regardless of amount.</p>
+        <div id="vendorList"></div>
+        <div class="row" style="margin-top:10px;">
+          <input class="field" type="text" id="newVendorName" placeholder="Vendor name (e.g. Tesco)" />
+          <select class="field" id="newVendorCat" style="flex:0;min-width:110px;">
+            <option>Food</option><option>Transport</option><option>Health</option><option>Shopping</option><option>Bills</option><option>Other</option>
+          </select>
+          <button class="save-btn" onclick="addVendor()"><i class="ti ti-plus"></i></button>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="settings-section">
+        <h3>Guardian password</h3>
+        <div class="row">
+          <input class="field" type="password" id="newGuardianPass" placeholder="New password" />
+          <button class="save-btn" onclick="changePass()">Update</button>
+        </div>
+        <div class="success-msg" id="passMsg">Password updated!</div>
+      </div>
+      <button class="logout-btn" onclick="logout('guardian')"><i class="ti ti-logout" style="vertical-align:-2px;margin-right:6px;"></i>Sign out</button>
+    </div>
+  </div>
+</div>
 
-            <div>
-                <label style="display: flex; align-items: center; gap: 10px;">
-                    <input type="checkbox" id="recurringCheckbox">
-                    Recurring expense?
-                </label>
-            </div>
+<!-- Expense Modal -->
+<div id="expenseModal" class="modal-backdrop" onclick="if(event.target===this)closeModal()">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-header">
+      <span class="modal-title">Add expense</span>
+      <button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-section-label">Pre-approved vendors</div>
+    <div id="vendorGrid" class="vendor-grid"></div>
+    <div class="modal-section-label">Or choose a category</div>
+    <div class="category-grid">
+      <button class="category-btn" onclick="selCat('Food',this)"><i class="ti ti-bowl-spoon" style="color:var(--green)"></i>Food</button>
+      <button class="category-btn" onclick="selCat('Transport',this)"><i class="ti ti-car" style="color:var(--blue)"></i>Transport</button>
+      <button class="category-btn" onclick="selCat('Health',this)"><i class="ti ti-first-aid-kit" style="color:var(--red)"></i>Health</button>
+      <button class="category-btn" onclick="selCat('Shopping',this)"><i class="ti ti-shopping-bag" style="color:var(--purple)"></i>Shopping</button>
+      <button class="category-btn" onclick="selCat('Bills',this)"><i class="ti ti-file-invoice" style="color:var(--amber)"></i>Bills</button>
+      <button class="category-btn" onclick="selCat('Other',this)"><i class="ti ti-dots-circle-horizontal" style="color:var(--gray)"></i>Other</button>
+    </div>
+    <div class="modal-section-label">Amount</div>
+    <div class="amount-grid">
+      <button class="amount-btn" onclick="selAmt(5,this)">$5</button>
+      <button class="amount-btn" onclick="selAmt(10,this)">$10</button>
+      <button class="amount-btn" onclick="selAmt(20,this)">$20</button>
+      <button class="amount-btn" onclick="selAmt(50,this)">$50</button>
+      <button class="amount-btn" onclick="selAmt(100,this)">$100</button>
+      <button class="amount-btn" onclick="selAmt(200,this)">$200</button>
+    </div>
+    <input class="custom-input" type="number" id="customAmt" placeholder="Or enter a custom amount..." min="1" oninput="selCustomAmt(this.value)" />
+    <div class="recurring-toggle" onclick="toggleRecurring()">
+      <div class="toggle-sw" id="toggleSw"></div>
+      <span style="font-size:14px;">Mark as recurring expense</span>
+    </div>
+    <button class="submit-btn" id="submitBtn" disabled onclick="submitExpense()">Add expense</button>
+  </div>
+</div>
 
-            <button id="submitBtn" onclick="submitExpense()" disabled style="width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 15px;">Submit</button>
-            <button class="close-btn" onclick="closeExpenseModal()" style="width: 100%; padding:
+<script>
+const CAT_COLORS = {Food:'#1D9E75',Transport:'#378ADD',Health:'#D85A30',Shopping:'#7F77DD',Bills:'#BA7517',Other:'#888780'};
+const CAT_ICONS  = {Food:'ti-bowl-spoon',Transport:'ti-car',Health:'ti-first-aid-kit',Shopping:'ti-shopping-bag',Bills:'ti-file-invoice',Other:'ti-dots-circle-horizontal'};
+
+const ls = { get:(k,d)=>{ try{return JSON.parse(localStorage.getItem(k))??d}catch{return d} }, set:(k,v)=>localStorage.setItem(k,JSON.stringify(v)) };
+
+let expenses  = ls.get('et_expenses',[]).map(e=>({...e,time:new Date(e.time)}));
+let vendors   = ls.get('et_vendors',[{name:'Grocery Store',category:'Food',recurring:true},{name:'Pharmacy',category:'Health',recurring:false},{name:'Electric Bill',category:'Bills',recurring:true},{name:'Bus Pass',category:'Transport',recurring:true}]);
+let threshold = ls.get('et_threshold',500);
+let gPass     = ls.get('et_gpass','guardian123');
+let ePin      = ls.get('et_epin','1234');
+
+let selCategory=null, selAmount=null, selVendor=null, isRecurring=false;
+let activeCatBtn=null, activeAmtBtn=null, activeVendorBtn=null;
+
+// Auth
+function showElderlyAuth(){ hide('guardianAuth'); show('elderlyAuth'); }
+function showGuardianAuth(){ hide('elderlyAuth'); show('guardianAuth'); }
+
+function elderlyLogin(){
+  if(document.getElementById('elderlyPin').value===ePin){
+    hide('elderlyAuth'); show('elderlyApp'); renderElderly();
+  } else { document.getElementById('elderlyError').textContent='Incorrect PIN. Try again.'; }
+}
+function guardianLogin(){
+  if(document.getElementById('guardianPass').value===gPass){
+    hide('guardianAuth'); show('guardianApp'); updateGuardian(); renderVendorList(); document.getElementById('thresholdInput').value=threshold;
+  } else { document.getElementById('guardianError').textContent='Incorrect password. Try again.'; }
+}
+function logout(role){
+  if(role==='elderly'){ hide('elderlyApp'); document.getElementById('elderlyPin').value=''; document.getElementById('elderlyError').textContent=''; }
+  else { hide('guardianApp'); document.getElementById('guardianPass').value=''; document.getElementById('guardianError').textContent=''; }
+  show('elderlyAuth');
+}
+
+// Tabs
+function switchTab(id, btn, scope){
+  const app = scope==='elderly' ? 'elderlyApp' : 'guardianApp';
+  document.querySelectorAll('#'+app+' .tab-content').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('#'+app+' .tab-button').forEach(el=>el.classList.remove('active'));
+  document.getElementById(id).classList.add('active'); btn.classList.add('active');
+  if(id==='dashboard') updateGuardian();
+  if(id==='pending') renderPending();
+  if(id==='gSettings'){ renderVendorList(); document.getElementById('thresholdInput').value=threshold; }
+}
+
+// Modal
+function openModal(){
+  selCategory=null; selAmount=null; selVendor=null; isRecurring=false;
+  activeCatBtn=null; activeAmtBtn=null; activeVendorBtn=null;
+  document.querySelectorAll('.category-btn,.amount-btn,.vendor-btn').forEach(b=>b.classList.remove('selected'));
+  document.getElementById('toggleSw').classList.remove('on');
+  document.getElementById('submitBtn').disabled=true;
+  document.getElementById('customAmt').value='';
+  renderVendorGrid();
+  document.getElementById('expenseModal').classList.add('active');
+}
+function closeModal(){ document.getElementById('expenseModal').classList.remove('active'); }
+
+function renderVendorGrid(){
+  const g=document.getElementById('vendorGrid');
+  if(!vendors.length){ g.innerHTML='<div style="font-size:13px;color:var(--text3);grid-column:span 2;">No vendors set up yet. Add them in Guardian Settings.</div>'; return; }
+  g.innerHTML=vendors.map((v,i)=>`<button class="vendor-btn" onclick="selVendorFn(${i},this)"><i class="ti ${CAT_ICONS[v.category]}" style="color:${CAT_COLORS[v.category]}"></i><span style="flex:1;">${v.name}</span>${v.recurring?'<span class="vendor-recurring-tag">Recurring</span>':''}</button>`).join('');
+}
+
+function selVendorFn(idx,btn){
+  selVendor=vendors[idx]; selCategory=vendors[idx].category; isRecurring=vendors[idx].recurring;
+  document.getElementById('toggleSw').classList.toggle('on',isRecurring);
+  if(activeVendorBtn) activeVendorBtn.classList.remove('selected');
+  if(activeCatBtn) activeCatBtn.classList.remove('selected');
+  btn.classList.add('selected'); activeVendorBtn=btn; activeCatBtn=null;
+  checkSubmit();
+}
+function selCat(cat,btn){
+  selCategory=cat; selVendor=null;
+  if(activeCatBtn) activeCatBtn.classList.remove('selected');
+  if(activeVendorBtn) activeVendorBtn.classList.remove('selected');
+  btn.classList.add('selected'); activeCatBtn=btn; activeVendorBtn=null;
+  checkSubmit();
+}
+function selAmt(amt,btn){
+  selAmount=amt; document.getElementById('customAmt').value='';
+  if(activeAmtBtn) activeAmtBtn.classList.remove('selected');
+  btn.classList.add('selected'); activeAmtBtn=btn;
+  checkSubmit();
+}
+function selCustomAmt(v){
+  selAmount=parseFloat(v)||null;
+  if(activeAmtBtn) activeAmtBtn.classList.remove('selected');
+  activeAmtBtn=null; checkSubmit();
+}
+function toggleRecurring(){ isRecurring=!isRecurring; document.getElementById('toggleSw').classList.toggle('on',isRecurring); }
+function checkSubmit(){ document.getElementById('submitBtn').disabled=!(selCategory&&selAmount); }
+
+function submitExpense(){
+  if(!selCategory||!selAmount) return;
+  const preApproved = selVendor!==null;
+  const over = selAmount>=threshold;
+  const status = (preApproved||!over) ? 'approved' : 'pending';
+  expenses.unshift({ category:selCategory, vendor:selVendor?selVendor.name:null, amount:selAmount, recurring:isRecurring, time:new Date(), id:Date.now(), status });
+  ls.set('et_expenses',expenses);
+  closeModal(); renderElderly(); updatePendingBadge();
+}
+
+function timeAgo(d){
+  const m=Math.round((Date.now()-new Date(d).getTime())/60000);
+  if(m<1) return 'Just now'; if(m<60) return m+'m ago';
+  const h=Math.round(m/60); if(h<24) return h+'h ago';
+  return Math.round(h/24)+'d ago';
+}
+
+function renderElderly(){
+  const approved=expenses.filter(e=>e.status==='approved');
+  const total=approved.reduce((s,e)=>s+e.amount,0);
+  document.getElementById('totalDisplay').textContent='$'+total;
+  document.getElementById('countDisplay').textContent=expenses.length===0?'No expenses yet':`${expenses.length} expense${expenses.length!==1?'s':''} logged`;
+  const list=document.getElementById('expenseList');
+  if(!expenses.length){ list.innerHTML='<div class="empty-state"><i class="ti ti-receipt"></i>Tap "Add an expense" to get started</div>'; return; }
+  list.innerHTML=expenses.map(e=>`
+    <div class="expense-item">
+      <div class="expense-icon"><i class="ti ${CAT_ICONS[e.category]}" style="color:${CAT_COLORS[e.category]}"></i></div>
+      <div style="flex:1">
+        <div class="expense-name">${e.vendor||e.category}${e.recurring?'<span class="badge badge-recurring">Recurring</span>':''}${e.status==='pending'?'<span class="badge badge-pending">Pending</span>':''}</div>
+        <div class="expense-time">${timeAgo(e.time)}</div>
+      </div>
+      <div class="expense-amount">$${e.amount}</div>
+    </div>`).join('');
+}
+
+function updatePendingBadge(){
+  const n=expenses.filter(e=>e.status==='pending').length;
+  const b=document.getElementById('pendingBadge');
+  b.textContent=n>0?`(${n})`:'';
+}
+
+function renderPending(){
+  const p=expenses.filter(e=>e.status==='pending');
+  const l=document.getElementById('pendingList');
+  if(!p.length){ l.innerHTML='<div class="empty-state"><i class="ti ti-check"></i>No pending expenses</div>'; return; }
+  l.innerHTML=p.map(e=>`
+    <div class="g-item">
+      <div class="g-dot" style="background:${CAT_COLORS[e.category]}"></div>
+      <div class="g-info">
+        <div class="g-name">${e.vendor||e.category} — $${e.amount}</div>
+        <div class="g-meta">${timeAgo(e.time)} · Over $${threshold} threshold</div>
+      </div>
+      <div class="g-actions">
+        <button class="g-btn g-approve" onclick="approveExp(${e.id})">Approve</button>
+        <button class="g-btn g-reject" onclick="rejectExp(${e.id})">Reject</button>
+      </div>
+    </div>`).join('');
+}
+
+function approveExp(id){ const e=expenses.find(x=>x.id===id); if(e) e.status='approved'; ls.set('et_expenses',expenses); renderPending(); updatePendingBadge(); }
+function rejectExp(id){ expenses=expenses.filter(x=>x.id!==id); ls.set('et_expenses',expenses); renderPending(); updatePendingBadge(); }
+
+function updateGuardian(){
+  const approved=expenses.filter(e=>e.status==='approved');
+  const total=approved.reduce((s,e)=>s+e.amount,0);
+  const largest=approved.length?Math.max(...approved.map(e=>e.amount)):0;
+  const catTotals={}; approved.forEach(e=>{catTotals[e.category]=(catTotals[e.category]||0)+e.amount;});
+  const freqMap=expenses.reduce((a,e)=>{a[e.category]=(a[e.category]||0)+1;return a},{});
+  const mf=Object.entries(freqMap).sort((a,b)=>b[1]-a[1])[0];
+  document.getElementById('g-total').textContent='$'+total;
+  document.getElementById('g-count').textContent=expenses.length;
+  document.getElementById('g-largest').textContent='$'+largest;
+  document.getElementById('g-frequent').textContent=mf?mf[0]:'—';
+  const pc=expenses.filter(e=>e.status==='pending').length;
+  document.getElementById('alertArea').innerHTML=pc>0?`<div class="alert-box"><i class="ti ti-alert-triangle"></i><span>${pc} expense${pc>1?'s':''} pending approval — over $${threshold} threshold.</span></div>`:'';
+  const maxA=Math.max(...Object.values(catTotals),1);
+  const catEl=document.getElementById('g-categories');
+  catEl.innerHTML=!Object.keys(catTotals).length?'<div class="empty-state" style="padding:1rem;">No data yet</div>':Object.entries(catTotals).sort((a,b)=>b[1]-a[1]).map(([cat,amt])=>`<div class="cat-row"><i class="ti ${CAT_ICONS[cat]} cat-icon" style="color:${CAT_COLORS[cat]}"></i><span class="cat-name">${cat}</span><div class="cat-bar-wrap"><div class="cat-bar" style="width:${Math.round(amt/maxA*100)}%;background:${CAT_COLORS[cat]}"></div></div><span class="cat-amt">$${amt}</span></div>`).join('');
+  document.getElementById('g-list').innerHTML=!expenses.length?'<div class="empty-state" style="padding:1rem;">No transactions yet</div>':expenses.map(e=>`<div class="g-item"><div class="g-dot" style="background:${CAT_COLORS[e.category]}"></div><div class="g-info"><div class="g-name">${e.vendor||e.category}${e.recurring?'<span class="badge badge-recurring">Recurring</span>':''}</div><div class="g-meta">${timeAgo(e.time)}</div></div><div style="text-align:right;"><div class="g-amt">$${e.amount}</div><span class="badge ${e.status==='pending'?'badge-pending':'badge-approved'}">${e.status}</span></div></div>`).join('');
+  updatePendingBadge();
+}
+
+function renderVendorList(){
+  const l=document.getElementById('vendorList');
+  if(!vendors.length){ l.innerHTML='<div style="font-size:13px;color:var(--text3);padding:8px 0;">No vendors yet.</div>'; return; }
+  l.innerHTML=vendors.map((v,i)=>`<div class="vendor-list-item"><i class="ti ${CAT_ICONS[v.category]} vl-icon" style="color:${CAT_COLORS[v.category]}"></i><div class="vl-info"><div class="vl-name">${v.name}</div><div class="vl-cat">${v.category}${v.recurring?' · Recurring':''}</div></div><button class="vl-remove" onclick="removeVendor(${i})"><i class="ti ti-trash"></i></button></div>`).join('');
+}
+function addVendor(){
+  const name=document.getElementById('newVendorName').value.trim();
+  if(!name) return;
+  vendors.push({name,category:document.getElementById('newVendorCat').value,recurring:false});
+  ls.set('et_vendors',vendors); document.getElementById('newVendorName').value=''; renderVendorList();
+}
+function removeVendor(i){ vendors.splice(i,1); ls.set('et_vendors',vendors); renderVendorList(); }
+
+function saveThreshold(){
+  threshold=parseFloat(document.getElementById('thresholdInput').value)||500;
+  ls.set('et_threshold',threshold); flash('thresholdMsg');
+}
+function changePass(){
+  const p=document.getElementById('newGuardianPass').value;
+  if(!p) return; gPass=p; ls.set('et_gpass',gPass); document.getElementById('newGuardianPass').value=''; flash('passMsg');
+}
+function flash(id){ const el=document.getElementById(id); el.style.display='block'; setTimeout(()=>el.style.display='none',2000); }
+
+function show(id){ document.getElementById(id).style.display='block'; }
+function hide(id){ document.getElementById(id).style.display='none'; }
+</script>
+</body>
+</html>

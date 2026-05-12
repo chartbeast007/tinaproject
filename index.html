@@ -27,40 +27,60 @@
     .app-header { padding: 1.25rem 1.25rem 0; display: flex; align-items: center; gap: 10px; }
     .app-header h1 { font-size: 18px; font-weight: 500; }
     .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+
+    /* Auth */
     .auth-screen { padding: 2rem 1.25rem; text-align: center; }
     .auth-screen h2 { font-size: 20px; font-weight: 500; margin-bottom: 8px; }
     .auth-screen p { font-size: 14px; color: var(--text2); margin-bottom: 1.5rem; }
     .auth-input { width: 100%; padding: 13px 14px; background: var(--bg2); border: 1.5px solid transparent; border-radius: var(--radius); font-size: 15px; color: var(--text); font-family: inherit; margin-bottom: 10px; outline: none; }
     .auth-input:focus { border-color: var(--text); }
-    .auth-btn { width: 100%; padding: 13px; background: var(--text); color: var(--bg); border: none; border-radius: var(--radius); font-size: 15px; font-weight: 500; cursor: pointer; font-family: inherit; }
+    .auth-btn { width: 100%; padding: 13px; background: var(--text); color: var(--bg); border: none; border-radius: var(--radius); font-size: 15px; font-weight: 500; cursor: pointer; font-family: inherit; transition: opacity 0.15s; }
     .auth-btn:hover { opacity: 0.85; }
     .auth-error { font-size: 13px; color: var(--red); margin-top: 8px; min-height: 18px; }
     .auth-switch { font-size: 13px; color: var(--text2); margin-top: 1rem; }
     .auth-switch span { color: var(--text); text-decoration: underline; cursor: pointer; }
-    .tab-bar { display: flex; border-bottom: 0.5px solid var(--border); margin-top: 1rem; }
-    .tab-button { flex: 1; padding: 13px 8px; background: none; border: none; border-bottom: 2.5px solid transparent; font-size: 13px; font-weight: 500; color: var(--text2); cursor: pointer; transition: color 0.15s, border-color 0.15s; font-family: inherit; }
+
+    /* Tabs */
+    .tab-bar { display: flex; border-bottom: 0.5px solid var(--border); margin-top: 1rem; overflow-x: auto; }
+    .tab-bar::-webkit-scrollbar { display: none; }
+    .tab-button { flex: 1; min-width: 0; padding: 12px 6px; background: none; border: none; border-bottom: 2.5px solid transparent; font-size: 12px; font-weight: 500; color: var(--text2); cursor: pointer; transition: color 0.15s, border-color 0.15s; font-family: inherit; white-space: nowrap; position: relative; }
     .tab-button.active { color: var(--text); border-bottom-color: var(--text); }
-    .tab-button i { font-size: 16px; vertical-align: -3px; margin-right: 4px; }
+    .tab-button i { font-size: 15px; vertical-align: -3px; margin-right: 3px; }
+    .tab-notif { position: absolute; top: 8px; right: 6px; width: 7px; height: 7px; background: var(--red); border-radius: 50%; display: none; }
+    .tab-notif.show { display: block; }
     .tab-content { display: none; padding: 1.25rem; }
     .tab-content.active { display: block; }
+
+    /* Balance */
     .balance-card { background: var(--bg2); border-radius: var(--radius-lg); padding: 1.5rem; text-align: center; margin-bottom: 1.25rem; }
     .balance-label { font-size: 13px; color: var(--text2); margin-bottom: 6px; }
     .balance-amount { font-size: 44px; font-weight: 500; letter-spacing: -1px; }
     .balance-sub { font-size: 13px; color: var(--text2); margin-top: 4px; }
+
     .add-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 17px; background: var(--text); color: var(--bg); border: none; border-radius: var(--radius-lg); font-size: 17px; font-weight: 500; cursor: pointer; margin-bottom: 1.5rem; transition: opacity 0.15s; font-family: inherit; }
     .add-btn:hover { opacity: 0.82; }
     .add-btn i { font-size: 22px; }
+
     .section-label { font-size: 12px; font-weight: 500; color: var(--text2); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
-    .expense-item { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 0.5px solid var(--border); }
+
+    /* Expense items */
+    .expense-item { display: flex; align-items: flex-start; gap: 12px; padding: 11px 0; border-bottom: 0.5px solid var(--border); }
     .expense-item:last-child { border-bottom: none; }
-    .expense-icon { width: 40px; height: 40px; border-radius: var(--radius); background: var(--bg2); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .expense-icon { width: 40px; height: 40px; border-radius: var(--radius); background: var(--bg2); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; margin-top: 1px; }
     .expense-name { font-size: 15px; font-weight: 500; }
     .expense-time { font-size: 12px; color: var(--text3); margin-top: 2px; }
-    .expense-amount { font-size: 15px; font-weight: 500; }
+    .expense-comment { font-size: 12px; color: var(--text2); margin-top: 4px; font-style: italic; }
+    .expense-amount { font-size: 15px; font-weight: 500; flex-shrink: 0; }
+
     .badge { display: inline-block; font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 20px; margin-left: 6px; vertical-align: middle; }
     .badge-pending { background: #FAEEDA; color: #633806; }
     .badge-approved { background: #EAF3DE; color: #27500A; }
+    .badge-rejected { background: #FCEBEB; color: #501313; }
     .badge-recurring { background: #E6F1FB; color: #0C447C; }
+
+    .appeal-btn { display: inline-block; font-size: 11px; color: var(--blue); background: none; border: none; cursor: pointer; padding: 0; margin-top: 4px; font-family: inherit; text-decoration: underline; }
+
+    /* Modal */
     .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: flex-end; justify-content: center; padding: 1rem; }
     .modal-backdrop.active { display: flex; }
     .modal { background: var(--bg); border-radius: var(--radius-xl); padding: 1.5rem; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; animation: slideUp 0.25s ease; }
@@ -69,34 +89,45 @@
     .modal-title { font-size: 18px; font-weight: 500; }
     .modal-close { background: var(--bg2); border: none; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; color: var(--text2); }
     .modal-section-label { font-size: 13px; color: var(--text2); margin-bottom: 10px; margin-top: 4px; }
+
     .vendor-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 1rem; max-height: 180px; overflow-y: auto; }
     .vendor-btn { display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: var(--bg2); border: 1.5px solid transparent; border-radius: var(--radius); cursor: pointer; font-size: 13px; color: var(--text); transition: border-color 0.15s; font-family: inherit; text-align: left; }
     .vendor-btn i { font-size: 18px; flex-shrink: 0; }
     .vendor-btn.selected { border-color: var(--text); background: var(--bg); }
     .vendor-recurring-tag { font-size: 10px; color: var(--blue); margin-left: auto; flex-shrink: 0; }
+
     .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 1rem; }
     .category-btn { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 8px; background: var(--bg2); border: 1.5px solid transparent; border-radius: var(--radius); cursor: pointer; font-size: 13px; color: var(--text); transition: border-color 0.15s; font-family: inherit; }
     .category-btn i { font-size: 24px; }
     .category-btn.selected { border-color: var(--text); background: var(--bg); }
+
     .amount-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
     .amount-btn { padding: 13px 8px; background: var(--bg2); border: 1.5px solid transparent; border-radius: var(--radius); font-size: 16px; font-weight: 500; cursor: pointer; color: var(--text); transition: border-color 0.15s; font-family: inherit; }
     .amount-btn.selected { border-color: var(--text); background: var(--bg); }
-    .custom-input { width: 100%; padding: 12px 14px; background: var(--bg2); border: 1.5px solid transparent; border-radius: var(--radius); font-size: 15px; color: var(--text); font-family: inherit; outline: none; margin-bottom: 1rem; }
-    .custom-input:focus { border-color: var(--text); }
-    .recurring-toggle { display: flex; align-items: center; gap: 10px; padding: 12px; background: var(--bg2); border-radius: var(--radius); margin-bottom: 1.25rem; cursor: pointer; }
+
+    .field { width: 100%; padding: 12px 14px; background: var(--bg2); border: 1.5px solid transparent; border-radius: var(--radius); font-size: 15px; color: var(--text); font-family: inherit; outline: none; margin-bottom: 10px; }
+    .field:focus { border-color: var(--text); }
+
+    .toggle-row { display: flex; align-items: center; gap: 10px; padding: 12px; background: var(--bg2); border-radius: var(--radius); margin-bottom: 1.25rem; cursor: pointer; }
     .toggle-sw { width: 40px; height: 22px; background: var(--border2); border-radius: 11px; position: relative; transition: background 0.2s; flex-shrink: 0; }
     .toggle-sw.on { background: var(--green); }
     .toggle-sw::after { content: ''; position: absolute; width: 18px; height: 18px; background: white; border-radius: 50%; top: 2px; left: 2px; transition: left 0.2s; }
     .toggle-sw.on::after { left: 20px; }
+
     .submit-btn { width: 100%; padding: 15px; background: var(--text); color: var(--bg); border: none; border-radius: var(--radius); font-size: 16px; font-weight: 500; cursor: pointer; transition: opacity 0.15s; font-family: inherit; }
     .submit-btn:disabled { opacity: 0.3; cursor: not-allowed; }
     .submit-btn:not(:disabled):hover { opacity: 0.82; }
+
+    /* Guardian */
     .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 1.5rem; }
     .stat-card { background: var(--bg2); border-radius: var(--radius); padding: 1rem; }
     .stat-label { font-size: 12px; color: var(--text2); margin-bottom: 4px; }
     .stat-value { font-size: 22px; font-weight: 500; }
-    .alert-box { background: #FAEEDA; border: 0.5px solid #FAC775; border-radius: var(--radius); padding: 12px 14px; font-size: 13px; color: #633806; display: flex; gap: 10px; align-items: flex-start; margin-bottom: 1rem; }
+
+    .alert-box { border-radius: var(--radius); padding: 12px 14px; font-size: 13px; display: flex; gap: 10px; align-items: flex-start; margin-bottom: 1rem; }
     .alert-box i { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .alert-warn { background: #FAEEDA; border: 0.5px solid #FAC775; color: #633806; }
+
     .cat-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid var(--border); }
     .cat-row:last-child { border-bottom: none; }
     .cat-icon { font-size: 18px; width: 24px; text-align: center; flex-shrink: 0; }
@@ -104,39 +135,82 @@
     .cat-bar-wrap { width: 80px; height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; flex-shrink: 0; }
     .cat-bar { height: 100%; border-radius: 3px; }
     .cat-amt { font-size: 14px; font-weight: 500; min-width: 44px; text-align: right; }
-    .g-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
+
+    /* Pending card */
+    .pending-card { background: var(--bg2); border-radius: var(--radius-lg); padding: 1rem; margin-bottom: 10px; }
+    .pending-card-header { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+    .pending-card-icon { width: 38px; height: 38px; border-radius: var(--radius); background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .pending-card-name { font-size: 15px; font-weight: 500; }
+    .pending-card-meta { font-size: 12px; color: var(--text3); margin-top: 2px; }
+    .pending-card-amt { font-size: 20px; font-weight: 500; margin-left: auto; flex-shrink: 0; }
+    .pending-card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .p-btn { flex: 1; padding: 10px; border: none; border-radius: var(--radius); font-size: 13px; font-weight: 500; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 6px; transition: opacity 0.15s; }
+    .p-btn:hover { opacity: 0.85; }
+    .p-approve { background: #EAF3DE; color: #27500A; }
+    .p-reject { background: #FCEBEB; color: #501313; }
+    .p-call { background: #E6F1FB; color: #0C447C; }
+    .reject-reason-row { margin-top: 8px; display: none; }
+    .reject-reason-input { width: 100%; padding: 10px 12px; background: var(--bg); border: 1.5px solid var(--border2); border-radius: var(--radius); font-size: 13px; color: var(--text); font-family: inherit; outline: none; margin-bottom: 8px; }
+    .reject-reason-input:focus { border-color: var(--text); }
+    .reject-confirm-btn { width: 100%; padding: 10px; background: var(--red); color: white; border: none; border-radius: var(--radius); font-size: 13px; font-weight: 500; cursor: pointer; font-family: inherit; }
+
+    /* G transaction list */
+    .g-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
     .g-item:last-child { border-bottom: none; }
-    .g-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-    .g-info { flex: 1; }
+    .g-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+    .g-info { flex: 1; min-width: 0; }
     .g-name { font-size: 14px; font-weight: 500; }
     .g-meta { font-size: 12px; color: var(--text3); margin-top: 2px; }
-    .g-amt { font-size: 14px; font-weight: 500; text-align: right; }
-    .g-actions { display: flex; gap: 6px; }
-    .g-btn { padding: 5px 10px; border: none; border-radius: var(--radius); font-size: 12px; font-weight: 500; cursor: pointer; font-family: inherit; }
-    .g-approve { background: #EAF3DE; color: #27500A; }
-    .g-reject { background: #FCEBEB; color: #501313; }
+    .g-comment { font-size: 12px; color: var(--text2); font-style: italic; margin-top: 3px; }
+    .g-right { text-align: right; flex-shrink: 0; }
+    .g-amt { font-size: 14px; font-weight: 500; }
+
+    /* Monthly summary */
+    .month-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+    .month-card { background: var(--bg2); border-radius: var(--radius); padding: 1rem; }
+    .month-card-label { font-size: 12px; color: var(--text2); margin-bottom: 4px; }
+    .month-card-val { font-size: 20px; font-weight: 500; }
+    .month-card-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
+    .trend { font-size: 13px; padding: 10px 14px; border-radius: var(--radius); margin-bottom: 1rem; }
+    .trend-up { background: #FCEBEB; color: #501313; }
+    .trend-down { background: #EAF3DE; color: #27500A; }
+    .trend-same { background: var(--bg2); color: var(--text2); }
+
+    /* Settings */
     .settings-section { margin-bottom: 1.5rem; }
-    .settings-section h3 { font-size: 15px; font-weight: 500; margin-bottom: 8px; }
+    .settings-section h3 { font-size: 15px; font-weight: 500; margin-bottom: 6px; }
     .settings-section p { font-size: 13px; color: var(--text2); margin-bottom: 12px; }
     .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-    .field { flex: 1; min-width: 120px; padding: 11px 13px; background: var(--bg2); border: 1.5px solid transparent; border-radius: var(--radius); font-size: 15px; color: var(--text); font-family: inherit; outline: none; }
-    .field:focus { border-color: var(--text); }
-    .save-btn { padding: 11px 16px; background: var(--text); color: var(--bg); border: none; border-radius: var(--radius); font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit; white-space: nowrap; }
+    .inline-field { flex: 1; min-width: 120px; padding: 11px 13px; background: var(--bg2); border: 1.5px solid transparent; border-radius: var(--radius); font-size: 15px; color: var(--text); font-family: inherit; outline: none; }
+    .inline-field:focus { border-color: var(--text); }
+    .save-btn { padding: 11px 16px; background: var(--text); color: var(--bg); border: none; border-radius: var(--radius); font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit; white-space: nowrap; transition: opacity 0.15s; }
     .save-btn:hover { opacity: 0.85; }
     .success-msg { font-size: 13px; color: var(--green); margin-top: 8px; display: none; }
+
     .vendor-list-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid var(--border); }
     .vendor-list-item:last-child { border-bottom: none; }
-    .vl-icon { font-size: 20px; width: 28px; text-align: center; }
+    .vl-icon { font-size: 20px; width: 28px; text-align: center; flex-shrink: 0; }
     .vl-info { flex: 1; }
     .vl-name { font-size: 14px; font-weight: 500; }
     .vl-cat { font-size: 12px; color: var(--text2); }
     .vl-remove { background: none; border: none; color: var(--text3); font-size: 18px; cursor: pointer; padding: 4px; }
     .vl-remove:hover { color: var(--red); }
+
+    .meet-link-preview { font-size: 13px; color: var(--blue); word-break: break-all; margin-top: 6px; }
+
     .divider { height: 0.5px; background: var(--border); margin: 1.25rem 0; }
-    .logout-btn { width: 100%; padding: 13px; background: none; border: 1.5px solid var(--border2); border-radius: var(--radius); font-size: 14px; color: var(--text2); cursor: pointer; font-family: inherit; margin-top: 0.5rem; }
+    .logout-btn { width: 100%; padding: 13px; background: none; border: 1.5px solid var(--border2); border-radius: var(--radius); font-size: 14px; color: var(--text2); cursor: pointer; font-family: inherit; transition: background 0.15s; }
     .logout-btn:hover { background: var(--bg2); }
     .empty-state { text-align: center; padding: 2rem 1rem; color: var(--text3); font-size: 14px; }
     .empty-state i { font-size: 32px; display: block; margin-bottom: 8px; }
+
+    /* Video call banner */
+    .video-call-banner { display: flex; align-items: center; gap: 10px; background: #E6F1FB; border-radius: var(--radius); padding: 12px 14px; margin-bottom: 1rem; text-decoration: none; }
+    .video-call-banner i { font-size: 22px; color: #0C447C; flex-shrink: 0; }
+    .vcb-text { flex: 1; }
+    .vcb-title { font-size: 14px; font-weight: 500; color: #0C447C; }
+    .vcb-sub { font-size: 12px; color: #185FA5; margin-top: 1px; }
+    .vcb-arrow { font-size: 18px; color: #185FA5; }
   </style>
 </head>
 <body>
@@ -170,9 +244,14 @@
   <!-- Elderly App -->
   <div id="elderlyApp" style="display:none;">
     <div class="tab-bar">
-      <button class="tab-button active" onclick="switchTab('spending',this,'elderly')"><i class="ti ti-home"></i>My Spending</button>
+      <button class="tab-button active" onclick="switchTab('spending',this,'elderly')"><i class="ti ti-home"></i>Spending</button>
+      <button class="tab-button" onclick="switchTab('eHistory',this,'elderly')">
+        <i class="ti ti-history"></i>History
+        <span class="tab-notif" id="rejectedNotif"></span>
+      </button>
       <button class="tab-button" onclick="switchTab('myAccount',this,'elderly')"><i class="ti ti-user"></i>Account</button>
     </div>
+
     <div id="spending" class="tab-content active">
       <div class="balance-card">
         <div class="balance-label">This month's spending</div>
@@ -183,9 +262,16 @@
       <div class="section-label">Recent expenses</div>
       <div id="expenseList"><div class="empty-state"><i class="ti ti-receipt"></i>Tap "Add an expense" to get started</div></div>
     </div>
+
+    <div id="eHistory" class="tab-content">
+      <div class="section-label" style="margin-bottom:12px;">All expenses</div>
+      <div id="eHistoryList"><div class="empty-state"><i class="ti ti-receipt"></i>No expenses yet</div></div>
+    </div>
+
     <div id="myAccount" class="tab-content">
       <div class="section-label">Account</div>
-      <p style="font-size:14px;color:var(--text2);margin-bottom:1rem;">Logged in as <strong style="color:var(--text);">User</strong></p>
+      <p style="font-size:14px;color:var(--text2);margin-bottom:1.25rem;">Logged in as <strong style="color:var(--text);">User</strong></p>
+      <div id="elderlyMeetLink" style="display:none;margin-bottom:1rem;"></div>
       <button class="logout-btn" onclick="logout('elderly')"><i class="ti ti-logout" style="vertical-align:-2px;margin-right:6px;"></i>Sign out</button>
     </div>
   </div>
@@ -194,7 +280,8 @@
   <div id="guardianApp" style="display:none;">
     <div class="tab-bar">
       <button class="tab-button active" onclick="switchTab('dashboard',this,'guardian')"><i class="ti ti-shield"></i>Dashboard</button>
-      <button class="tab-button" onclick="switchTab('pending',this,'guardian')"><i class="ti ti-clock"></i>Pending<span id="pendingBadge" style="color:var(--red);margin-left:3px;"></span></button>
+      <button class="tab-button" onclick="switchTab('pending',this,'guardian')"><i class="ti ti-clock"></i>Pending<span id="pendingBadge" style="color:var(--red);margin-left:3px;font-size:11px;"></span></button>
+      <button class="tab-button" onclick="switchTab('gHistory',this,'guardian')"><i class="ti ti-history"></i>History</button>
       <button class="tab-button" onclick="switchTab('gSettings',this,'guardian')"><i class="ti ti-settings"></i>Settings</button>
     </div>
 
@@ -206,35 +293,64 @@
         <div class="stat-card"><div class="stat-label">Most frequent</div><div class="stat-value" style="font-size:16px;" id="g-frequent">—</div></div>
       </div>
       <div id="alertArea"></div>
-      <div style="margin-bottom:1.5rem;"><div class="section-label">By category</div><div id="g-categories"><div class="empty-state" style="padding:1rem;">No data yet</div></div></div>
-      <div><div class="section-label">All transactions</div><div id="g-list"><div class="empty-state" style="padding:1rem;">No transactions yet</div></div></div>
+      <div id="guardianMeetBanner" style="display:none;"></div>
+      <div style="margin-bottom:1.5rem;">
+        <div class="section-label">By category</div>
+        <div id="g-categories"><div class="empty-state" style="padding:1rem;">No data yet</div></div>
+      </div>
+      <div>
+        <div class="section-label">Recent approved</div>
+        <div id="g-list"><div class="empty-state" style="padding:1rem;">No transactions yet</div></div>
+      </div>
       <button class="logout-btn" style="margin-top:1rem;" onclick="logout('guardian')"><i class="ti ti-logout" style="vertical-align:-2px;margin-right:6px;"></i>Sign out</button>
     </div>
 
     <div id="pending" class="tab-content">
-      <div class="section-label">Awaiting approval</div>
+      <div id="pendingMeetBanner" style="margin-bottom:1rem;"></div>
+      <div class="section-label" style="margin-bottom:12px;">Awaiting approval</div>
       <div id="pendingList"><div class="empty-state"><i class="ti ti-check"></i>No pending expenses</div></div>
+    </div>
+
+    <div id="gHistory" class="tab-content">
+      <div style="margin-bottom:1.5rem;">
+        <div class="section-label">Monthly summary</div>
+        <div id="monthlySummary"></div>
+      </div>
+      <div class="divider" style="margin-top:0;"></div>
+      <div class="section-label" style="margin-bottom:12px;">Full history</div>
+      <div id="gHistoryList"><div class="empty-state" style="padding:1rem;">No history yet</div></div>
     </div>
 
     <div id="gSettings" class="tab-content">
       <div class="settings-section">
         <h3>Alert threshold</h3>
-        <p>Expenses above this amount require your approval before they count.</p>
+        <p>Expenses above this amount require your approval.</p>
         <div class="row">
           <span style="font-size:18px;font-weight:500;">$</span>
-          <input class="field" type="number" id="thresholdInput" min="1" style="max-width:140px;" />
+          <input class="inline-field" type="number" id="thresholdInput" min="1" style="max-width:140px;" />
           <button class="save-btn" onclick="saveThreshold()">Save</button>
         </div>
         <div class="success-msg" id="thresholdMsg">Saved!</div>
       </div>
       <div class="divider"></div>
       <div class="settings-section">
+        <h3>Google Meet link</h3>
+        <p>Set a permanent Meet room for video calls with the user. They'll see a "Join call" button in their account tab.</p>
+        <div class="row">
+          <input class="inline-field" type="url" id="meetLinkInput" placeholder="https://meet.google.com/abc-defg-hij" />
+          <button class="save-btn" onclick="saveMeetLink()">Save</button>
+        </div>
+        <div id="meetLinkPreview" class="meet-link-preview"></div>
+        <div class="success-msg" id="meetMsg">Meet link saved!</div>
+      </div>
+      <div class="divider"></div>
+      <div class="settings-section">
         <h3>Pre-approved vendors</h3>
-        <p>Expenses from these vendors are automatically approved regardless of amount.</p>
+        <p>These vendors are always approved automatically, regardless of amount.</p>
         <div id="vendorList"></div>
         <div class="row" style="margin-top:10px;">
-          <input class="field" type="text" id="newVendorName" placeholder="Vendor name (e.g. Tesco)" />
-          <select class="field" id="newVendorCat" style="flex:0;min-width:110px;">
+          <input class="inline-field" type="text" id="newVendorName" placeholder="Vendor name (e.g. Tesco)" />
+          <select class="inline-field" id="newVendorCat" style="flex:0;min-width:110px;">
             <option>Food</option><option>Transport</option><option>Health</option><option>Shopping</option><option>Bills</option><option>Other</option>
           </select>
           <button class="save-btn" onclick="addVendor()"><i class="ti ti-plus"></i></button>
@@ -244,7 +360,7 @@
       <div class="settings-section">
         <h3>Guardian password</h3>
         <div class="row">
-          <input class="field" type="password" id="newGuardianPass" placeholder="New password" />
+          <input class="inline-field" type="password" id="newGuardianPass" placeholder="New password" />
           <button class="save-btn" onclick="changePass()">Update</button>
         </div>
         <div class="success-msg" id="passMsg">Password updated!</div>
@@ -281,8 +397,8 @@
       <button class="amount-btn" onclick="selAmt(100,this)">$100</button>
       <button class="amount-btn" onclick="selAmt(200,this)">$200</button>
     </div>
-    <input class="custom-input" type="number" id="customAmt" placeholder="Or enter a custom amount..." min="1" oninput="selCustomAmt(this.value)" />
-    <div class="recurring-toggle" onclick="toggleRecurring()">
+    <input class="field" type="number" id="customAmt" placeholder="Or enter a custom amount..." min="1" oninput="selCustomAmt(this.value)" />
+    <div class="toggle-row" onclick="toggleRecurring()">
       <div class="toggle-sw" id="toggleSw"></div>
       <span style="font-size:14px;">Mark as recurring expense</span>
     </div>
@@ -290,33 +406,73 @@
   </div>
 </div>
 
-<script>
-const CAT_COLORS = {Food:'#1D9E75',Transport:'#378ADD',Health:'#D85A30',Shopping:'#7F77DD',Bills:'#BA7517',Other:'#888780'};
-const CAT_ICONS  = {Food:'ti-bowl-spoon',Transport:'ti-car',Health:'ti-first-aid-kit',Shopping:'ti-shopping-bag',Bills:'ti-file-invoice',Other:'ti-dots-circle-horizontal'};
+<!-- Appeal Modal -->
+<div id="appealModal" class="modal-backdrop" onclick="if(event.target===this)closeAppeal()">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-header">
+      <span class="modal-title">Resubmit expense</span>
+      <button class="modal-close" onclick="closeAppeal()"><i class="ti ti-x"></i></button>
+    </div>
+    <p style="font-size:14px;color:var(--text2);margin-bottom:1rem;">Add a note explaining this expense, then resubmit for guardian approval.</p>
+    <textarea class="field" id="appealNote" rows="3" placeholder="e.g. This was for my prescription medication..." style="resize:vertical;"></textarea>
+    <button class="submit-btn" onclick="submitAppeal()">Resubmit for approval</button>
+  </div>
+</div>
 
-const ls = { get:(k,d)=>{ try{return JSON.parse(localStorage.getItem(k))??d}catch{return d} }, set:(k,v)=>localStorage.setItem(k,JSON.stringify(v)) };
+<script>
+const CC = {Food:'#1D9E75',Transport:'#378ADD',Health:'#D85A30',Shopping:'#7F77DD',Bills:'#BA7517',Other:'#888780'};
+const CI = {Food:'ti-bowl-spoon',Transport:'ti-car',Health:'ti-first-aid-kit',Shopping:'ti-shopping-bag',Bills:'ti-file-invoice',Other:'ti-dots-circle-horizontal'};
+
+const ls = {
+  get:(k,d)=>{ try{ return JSON.parse(localStorage.getItem(k))??d }catch{ return d } },
+  set:(k,v)=>localStorage.setItem(k,JSON.stringify(v))
+};
 
 let expenses  = ls.get('et_expenses',[]).map(e=>({...e,time:new Date(e.time)}));
-let vendors   = ls.get('et_vendors',[{name:'Grocery Store',category:'Food',recurring:true},{name:'Pharmacy',category:'Health',recurring:false},{name:'Electric Bill',category:'Bills',recurring:true},{name:'Bus Pass',category:'Transport',recurring:true}]);
-let threshold = ls.get('et_threshold',500);
-let gPass     = ls.get('et_gpass','guardian123');
-let ePin      = ls.get('et_epin','1234');
+let vendors   = ls.get('et_vendors',[
+  {name:'Grocery Store',category:'Food',recurring:true},
+  {name:'Pharmacy',category:'Health',recurring:false},
+  {name:'Electric Bill',category:'Bills',recurring:true},
+  {name:'Bus Pass',category:'Transport',recurring:true}
+]);
+let threshold = ls.get('et_threshold', 500);
+let gPass     = ls.get('et_gpass', 'guardian123');
+let ePin      = ls.get('et_epin', '1234');
+let meetLink  = ls.get('et_meet', '');
 
 let selCategory=null, selAmount=null, selVendor=null, isRecurring=false;
 let activeCatBtn=null, activeAmtBtn=null, activeVendorBtn=null;
+let appealExpenseId=null;
+
+// Helpers
+function show(id){ document.getElementById(id).style.display='block'; }
+function hide(id){ document.getElementById(id).style.display='none'; }
+function flash(id){ const el=document.getElementById(id); el.style.display='block'; setTimeout(()=>el.style.display='none',2000); }
+function timeAgo(d){
+  const m=Math.round((Date.now()-new Date(d).getTime())/60000);
+  if(m<1) return 'Just now'; if(m<60) return m+'m ago';
+  const h=Math.round(m/60); if(h<24) return h+'h ago';
+  return Math.round(h/24)+'d ago';
+}
+function monthLabel(d){ return new Date(d).toLocaleDateString('en-US',{month:'long',year:'numeric'}); }
+function currentMonth(){ const n=new Date(); return `${n.getFullYear()}-${n.getMonth()}`; }
+function expenseMonth(e){ const d=new Date(e.time); return `${d.getFullYear()}-${d.getMonth()}`; }
 
 // Auth
 function showElderlyAuth(){ hide('guardianAuth'); show('elderlyAuth'); }
 function showGuardianAuth(){ hide('elderlyAuth'); show('guardianAuth'); }
-
 function elderlyLogin(){
   if(document.getElementById('elderlyPin').value===ePin){
-    hide('elderlyAuth'); show('elderlyApp'); renderElderly();
+    hide('elderlyAuth'); show('elderlyApp'); renderElderly(); updateRejectedNotif(); renderElderlyMeetLink();
   } else { document.getElementById('elderlyError').textContent='Incorrect PIN. Try again.'; }
 }
 function guardianLogin(){
   if(document.getElementById('guardianPass').value===gPass){
-    hide('guardianAuth'); show('guardianApp'); updateGuardian(); renderVendorList(); document.getElementById('thresholdInput').value=threshold;
+    hide('guardianAuth'); show('guardianApp');
+    updateGuardian(); renderVendorList();
+    document.getElementById('thresholdInput').value=threshold;
+    if(meetLink) document.getElementById('meetLinkInput').value=meetLink;
+    renderMeetLinkPreview();
   } else { document.getElementById('guardianError').textContent='Incorrect password. Try again.'; }
 }
 function logout(role){
@@ -332,8 +488,10 @@ function switchTab(id, btn, scope){
   document.querySelectorAll('#'+app+' .tab-button').forEach(el=>el.classList.remove('active'));
   document.getElementById(id).classList.add('active'); btn.classList.add('active');
   if(id==='dashboard') updateGuardian();
-  if(id==='pending') renderPending();
-  if(id==='gSettings'){ renderVendorList(); document.getElementById('thresholdInput').value=threshold; }
+  if(id==='pending'){ renderPending(); renderMeetBanner('pendingMeetBanner'); }
+  if(id==='gHistory'){ renderMonthlySummary(); renderGHistory(); }
+  if(id==='gSettings'){ renderVendorList(); document.getElementById('thresholdInput').value=threshold; renderMeetLinkPreview(); if(meetLink) document.getElementById('meetLinkInput').value=meetLink; }
+  if(id==='eHistory'){ renderEHistory(); clearRejectedNotif(); }
 }
 
 // Modal
@@ -351,30 +509,26 @@ function closeModal(){ document.getElementById('expenseModal').classList.remove(
 
 function renderVendorGrid(){
   const g=document.getElementById('vendorGrid');
-  if(!vendors.length){ g.innerHTML='<div style="font-size:13px;color:var(--text3);grid-column:span 2;">No vendors set up yet. Add them in Guardian Settings.</div>'; return; }
-  g.innerHTML=vendors.map((v,i)=>`<button class="vendor-btn" onclick="selVendorFn(${i},this)"><i class="ti ${CAT_ICONS[v.category]}" style="color:${CAT_COLORS[v.category]}"></i><span style="flex:1;">${v.name}</span>${v.recurring?'<span class="vendor-recurring-tag">Recurring</span>':''}</button>`).join('');
+  if(!vendors.length){ g.innerHTML='<div style="font-size:13px;color:var(--text3);grid-column:span 2;padding:4px 0;">No vendors yet — guardian can add them in Settings.</div>'; return; }
+  g.innerHTML=vendors.map((v,i)=>`<button class="vendor-btn" onclick="selVendorFn(${i},this)"><i class="ti ${CI[v.category]}" style="color:${CC[v.category]}"></i><span style="flex:1;">${v.name}</span>${v.recurring?'<span class="vendor-recurring-tag">Recurring</span>':''}</button>`).join('');
 }
-
 function selVendorFn(idx,btn){
   selVendor=vendors[idx]; selCategory=vendors[idx].category; isRecurring=vendors[idx].recurring;
   document.getElementById('toggleSw').classList.toggle('on',isRecurring);
   if(activeVendorBtn) activeVendorBtn.classList.remove('selected');
   if(activeCatBtn) activeCatBtn.classList.remove('selected');
-  btn.classList.add('selected'); activeVendorBtn=btn; activeCatBtn=null;
-  checkSubmit();
+  btn.classList.add('selected'); activeVendorBtn=btn; activeCatBtn=null; checkSubmit();
 }
 function selCat(cat,btn){
   selCategory=cat; selVendor=null;
   if(activeCatBtn) activeCatBtn.classList.remove('selected');
   if(activeVendorBtn) activeVendorBtn.classList.remove('selected');
-  btn.classList.add('selected'); activeCatBtn=btn; activeVendorBtn=null;
-  checkSubmit();
+  btn.classList.add('selected'); activeCatBtn=btn; activeVendorBtn=null; checkSubmit();
 }
 function selAmt(amt,btn){
   selAmount=amt; document.getElementById('customAmt').value='';
   if(activeAmtBtn) activeAmtBtn.classList.remove('selected');
-  btn.classList.add('selected'); activeAmtBtn=btn;
-  checkSubmit();
+  btn.classList.add('selected'); activeAmtBtn=btn; checkSubmit();
 }
 function selCustomAmt(v){
   selAmount=parseFloat(v)||null;
@@ -386,90 +540,233 @@ function checkSubmit(){ document.getElementById('submitBtn').disabled=!(selCateg
 
 function submitExpense(){
   if(!selCategory||!selAmount) return;
-  const preApproved = selVendor!==null;
-  const over = selAmount>=threshold;
-  const status = (preApproved||!over) ? 'approved' : 'pending';
-  expenses.unshift({ category:selCategory, vendor:selVendor?selVendor.name:null, amount:selAmount, recurring:isRecurring, time:new Date(), id:Date.now(), status });
+  const preApproved=selVendor!==null;
+  const over=selAmount>=threshold;
+  const status=(preApproved||!over)?'approved':'pending';
+  expenses.unshift({
+    category:selCategory, vendor:selVendor?selVendor.name:null,
+    amount:selAmount, recurring:isRecurring,
+    time:new Date(), id:Date.now(), status,
+    guardianComment:null, appealNote:null
+  });
   ls.set('et_expenses',expenses);
   closeModal(); renderElderly(); updatePendingBadge();
 }
 
-function timeAgo(d){
-  const m=Math.round((Date.now()-new Date(d).getTime())/60000);
-  if(m<1) return 'Just now'; if(m<60) return m+'m ago';
-  const h=Math.round(m/60); if(h<24) return h+'h ago';
-  return Math.round(h/24)+'d ago';
-}
-
+// Elderly render
 function renderElderly(){
-  const approved=expenses.filter(e=>e.status==='approved');
+  const approved=expenses.filter(e=>e.status==='approved'&&expenseMonth(e)===currentMonth());
   const total=approved.reduce((s,e)=>s+e.amount,0);
   document.getElementById('totalDisplay').textContent='$'+total;
   document.getElementById('countDisplay').textContent=expenses.length===0?'No expenses yet':`${expenses.length} expense${expenses.length!==1?'s':''} logged`;
   const list=document.getElementById('expenseList');
-  if(!expenses.length){ list.innerHTML='<div class="empty-state"><i class="ti ti-receipt"></i>Tap "Add an expense" to get started</div>'; return; }
-  list.innerHTML=expenses.map(e=>`
-    <div class="expense-item">
-      <div class="expense-icon"><i class="ti ${CAT_ICONS[e.category]}" style="color:${CAT_COLORS[e.category]}"></i></div>
-      <div style="flex:1">
-        <div class="expense-name">${e.vendor||e.category}${e.recurring?'<span class="badge badge-recurring">Recurring</span>':''}${e.status==='pending'?'<span class="badge badge-pending">Pending</span>':''}</div>
-        <div class="expense-time">${timeAgo(e.time)}</div>
-      </div>
-      <div class="expense-amount">$${e.amount}</div>
-    </div>`).join('');
+  const recent=expenses.slice(0,8);
+  if(!recent.length){ list.innerHTML='<div class="empty-state"><i class="ti ti-receipt"></i>Tap "Add an expense" to get started</div>'; return; }
+  list.innerHTML=recent.map(e=>expenseItemHTML(e,true)).join('');
 }
 
+function expenseItemHTML(e, showAppeal){
+  const comment = e.guardianComment ? `<div class="expense-comment"><i class="ti ti-message-2" style="font-size:11px;vertical-align:-1px;margin-right:3px;"></i>${e.guardianComment}</div>` : '';
+  const appealBtnHTML = (showAppeal && e.status==='rejected') ? `<button class="appeal-btn" onclick="openAppeal(${e.id})">Resubmit this expense →</button>` : '';
+  return `<div class="expense-item">
+    <div class="expense-icon"><i class="ti ${CI[e.category]}" style="color:${CC[e.category]}"></i></div>
+    <div style="flex:1;min-width:0;">
+      <div class="expense-name">${e.vendor||e.category}${e.recurring?'<span class="badge badge-recurring">Recurring</span>':''}${e.status==='pending'?'<span class="badge badge-pending">Pending</span>':e.status==='rejected'?'<span class="badge badge-rejected">Rejected</span>':''}</div>
+      <div class="expense-time">${timeAgo(e.time)}</div>
+      ${comment}
+      ${appealBtnHTML}
+    </div>
+    <div class="expense-amount">$${e.amount}</div>
+  </div>`;
+}
+
+function renderEHistory(){
+  const list=document.getElementById('eHistoryList');
+  if(!expenses.length){ list.innerHTML='<div class="empty-state"><i class="ti ti-receipt"></i>No expenses yet</div>'; return; }
+  list.innerHTML=expenses.map(e=>expenseItemHTML(e,true)).join('');
+}
+
+function updateRejectedNotif(){
+  const hasRejected=expenses.some(e=>e.status==='rejected'&&!e.seenByUser);
+  document.getElementById('rejectedNotif').classList.toggle('show',hasRejected);
+}
+function clearRejectedNotif(){
+  expenses.forEach(e=>{ if(e.status==='rejected') e.seenByUser=true; });
+  ls.set('et_expenses',expenses);
+  document.getElementById('rejectedNotif').classList.remove('show');
+}
+
+// Appeal
+function openAppeal(id){
+  appealExpenseId=id;
+  document.getElementById('appealNote').value='';
+  document.getElementById('appealModal').classList.add('active');
+}
+function closeAppeal(){ document.getElementById('appealModal').classList.remove('active'); }
+function submitAppeal(){
+  const note=document.getElementById('appealNote').value.trim();
+  const e=expenses.find(x=>x.id===appealExpenseId);
+  if(e){ e.status='pending'; e.appealNote=note||null; e.guardianComment=null; e.seenByUser=true; }
+  ls.set('et_expenses',expenses);
+  closeAppeal(); renderElderly(); renderEHistory(); updateRejectedNotif(); updatePendingBadge();
+}
+
+// Pending
 function updatePendingBadge(){
   const n=expenses.filter(e=>e.status==='pending').length;
   const b=document.getElementById('pendingBadge');
   b.textContent=n>0?`(${n})`:'';
 }
-
 function renderPending(){
   const p=expenses.filter(e=>e.status==='pending');
   const l=document.getElementById('pendingList');
   if(!p.length){ l.innerHTML='<div class="empty-state"><i class="ti ti-check"></i>No pending expenses</div>'; return; }
   l.innerHTML=p.map(e=>`
-    <div class="g-item">
-      <div class="g-dot" style="background:${CAT_COLORS[e.category]}"></div>
-      <div class="g-info">
-        <div class="g-name">${e.vendor||e.category} — $${e.amount}</div>
-        <div class="g-meta">${timeAgo(e.time)} · Over $${threshold} threshold</div>
+    <div class="pending-card" id="pc${e.id}">
+      <div class="pending-card-header">
+        <div class="pending-card-icon"><i class="ti ${CI[e.category]}" style="color:${CC[e.category]}"></i></div>
+        <div style="flex:1;">
+          <div class="pending-card-name">${e.vendor||e.category}${e.recurring?'<span class="badge badge-recurring">Recurring</span>':''}</div>
+          <div class="pending-card-meta">${timeAgo(e.time)}${e.appealNote?` · Note: "${e.appealNote}"`:''}</div>
+        </div>
+        <div class="pending-card-amt">$${e.amount}</div>
       </div>
-      <div class="g-actions">
-        <button class="g-btn g-approve" onclick="approveExp(${e.id})">Approve</button>
-        <button class="g-btn g-reject" onclick="rejectExp(${e.id})">Reject</button>
+      <div class="pending-card-actions">
+        ${meetLink?`<a class="p-btn p-call" href="${meetLink}" target="_blank" rel="noopener"><i class="ti ti-video"></i>Video call</a>`:''}
+        <button class="p-btn p-approve" onclick="approveExp(${e.id})"><i class="ti ti-check"></i>Approve</button>
+        <button class="p-btn p-reject" onclick="showRejectForm(${e.id})"><i class="ti ti-x"></i>Reject</button>
+      </div>
+      <div class="reject-reason-row" id="rr${e.id}">
+        <input class="reject-reason-input" type="text" id="ri${e.id}" placeholder="Reason for rejection (optional)..." />
+        <button class="reject-confirm-btn" onclick="rejectExp(${e.id})">Confirm rejection</button>
       </div>
     </div>`).join('');
 }
+function showRejectForm(id){
+  const row=document.getElementById('rr'+id);
+  row.style.display=row.style.display==='block'?'none':'block';
+}
+function approveExp(id){
+  const e=expenses.find(x=>x.id===id);
+  if(e){ e.status='approved'; e.guardianComment=null; }
+  ls.set('et_expenses',expenses); renderPending(); updatePendingBadge(); renderElderly();
+}
+function rejectExp(id){
+  const e=expenses.find(x=>x.id===id);
+  const reason=document.getElementById('ri'+id)?.value.trim()||null;
+  if(e){ e.status='rejected'; e.guardianComment=reason; e.seenByUser=false; }
+  ls.set('et_expenses',expenses); renderPending(); updatePendingBadge(); renderElderly(); updateRejectedNotif();
+}
 
-function approveExp(id){ const e=expenses.find(x=>x.id===id); if(e) e.status='approved'; ls.set('et_expenses',expenses); renderPending(); updatePendingBadge(); }
-function rejectExp(id){ expenses=expenses.filter(x=>x.id!==id); ls.set('et_expenses',expenses); renderPending(); updatePendingBadge(); }
+// Meet link
+function saveMeetLink(){
+  meetLink=document.getElementById('meetLinkInput').value.trim();
+  ls.set('et_meet',meetLink); renderMeetLinkPreview(); renderElderlyMeetLink(); flash('meetMsg');
+}
+function renderMeetLinkPreview(){
+  const el=document.getElementById('meetLinkPreview');
+  el.textContent=meetLink?meetLink:'';
+  renderMeetBanner('guardianMeetBanner');
+}
+function renderMeetBanner(containerId){
+  const el=document.getElementById(containerId);
+  if(!el) return;
+  if(meetLink){
+    el.innerHTML=`<a class="video-call-banner" href="${meetLink}" target="_blank" rel="noopener"><i class="ti ti-video" aria-hidden="true"></i><div class="vcb-text"><div class="vcb-title">Start video call</div><div class="vcb-sub">Opens Google Meet room</div></div><i class="ti ti-arrow-right vcb-arrow"></i></a>`;
+    el.style.display='block';
+  } else { el.style.display='none'; }
+}
+function renderElderlyMeetLink(){
+  const el=document.getElementById('elderlyMeetLink');
+  if(meetLink){
+    el.innerHTML=`<a class="video-call-banner" href="${meetLink}" target="_blank" rel="noopener"><i class="ti ti-video" aria-hidden="true"></i><div class="vcb-text"><div class="vcb-title">Join video call</div><div class="vcb-sub">Call your guardian on Google Meet</div></div><i class="ti ti-arrow-right vcb-arrow"></i></a>`;
+    el.style.display='block';
+  } else { el.style.display='none'; }
+}
 
+// Guardian dashboard
 function updateGuardian(){
-  const approved=expenses.filter(e=>e.status==='approved');
+  const approved=expenses.filter(e=>e.status==='approved'&&expenseMonth(e)===currentMonth());
   const total=approved.reduce((s,e)=>s+e.amount,0);
   const largest=approved.length?Math.max(...approved.map(e=>e.amount)):0;
   const catTotals={}; approved.forEach(e=>{catTotals[e.category]=(catTotals[e.category]||0)+e.amount;});
   const freqMap=expenses.reduce((a,e)=>{a[e.category]=(a[e.category]||0)+1;return a},{});
   const mf=Object.entries(freqMap).sort((a,b)=>b[1]-a[1])[0];
   document.getElementById('g-total').textContent='$'+total;
-  document.getElementById('g-count').textContent=expenses.length;
+  document.getElementById('g-count').textContent=expenses.filter(e=>expenseMonth(e)===currentMonth()).length;
   document.getElementById('g-largest').textContent='$'+largest;
   document.getElementById('g-frequent').textContent=mf?mf[0]:'—';
   const pc=expenses.filter(e=>e.status==='pending').length;
-  document.getElementById('alertArea').innerHTML=pc>0?`<div class="alert-box"><i class="ti ti-alert-triangle"></i><span>${pc} expense${pc>1?'s':''} pending approval — over $${threshold} threshold.</span></div>`:'';
+  document.getElementById('alertArea').innerHTML=pc>0?`<div class="alert-box alert-warn"><i class="ti ti-alert-triangle"></i><span>${pc} expense${pc>1?'s':''} pending approval — over $${threshold} threshold.</span></div>`:'';
+  renderMeetBanner('guardianMeetBanner');
   const maxA=Math.max(...Object.values(catTotals),1);
   const catEl=document.getElementById('g-categories');
-  catEl.innerHTML=!Object.keys(catTotals).length?'<div class="empty-state" style="padding:1rem;">No data yet</div>':Object.entries(catTotals).sort((a,b)=>b[1]-a[1]).map(([cat,amt])=>`<div class="cat-row"><i class="ti ${CAT_ICONS[cat]} cat-icon" style="color:${CAT_COLORS[cat]}"></i><span class="cat-name">${cat}</span><div class="cat-bar-wrap"><div class="cat-bar" style="width:${Math.round(amt/maxA*100)}%;background:${CAT_COLORS[cat]}"></div></div><span class="cat-amt">$${amt}</span></div>`).join('');
-  document.getElementById('g-list').innerHTML=!expenses.length?'<div class="empty-state" style="padding:1rem;">No transactions yet</div>':expenses.map(e=>`<div class="g-item"><div class="g-dot" style="background:${CAT_COLORS[e.category]}"></div><div class="g-info"><div class="g-name">${e.vendor||e.category}${e.recurring?'<span class="badge badge-recurring">Recurring</span>':''}</div><div class="g-meta">${timeAgo(e.time)}</div></div><div style="text-align:right;"><div class="g-amt">$${e.amount}</div><span class="badge ${e.status==='pending'?'badge-pending':'badge-approved'}">${e.status}</span></div></div>`).join('');
+  catEl.innerHTML=!Object.keys(catTotals).length?'<div class="empty-state" style="padding:1rem;">No approved expenses this month</div>':Object.entries(catTotals).sort((a,b)=>b[1]-a[1]).map(([cat,amt])=>`<div class="cat-row"><i class="ti ${CI[cat]} cat-icon" style="color:${CC[cat]}"></i><span class="cat-name">${cat}</span><div class="cat-bar-wrap"><div class="cat-bar" style="width:${Math.round(amt/maxA*100)}%;background:${CC[cat]}"></div></div><span class="cat-amt">$${amt}</span></div>`).join('');
+  const recent=expenses.filter(e=>e.status==='approved').slice(0,10);
+  document.getElementById('g-list').innerHTML=!recent.length?'<div class="empty-state" style="padding:1rem;">No approved transactions yet</div>':recent.map(e=>`<div class="g-item"><div class="g-dot" style="background:${CC[e.category]};margin-top:5px;"></div><div class="g-info"><div class="g-name">${e.vendor||e.category}${e.recurring?'<span class="badge badge-recurring">Recurring</span>':''}</div><div class="g-meta">${timeAgo(e.time)}</div></div><div class="g-right"><div class="g-amt">$${e.amount}</div><span class="badge badge-approved">approved</span></div></div>`).join('');
   updatePendingBadge();
 }
 
+// History
+function renderGHistory(){
+  const list=document.getElementById('gHistoryList');
+  if(!expenses.length){ list.innerHTML='<div class="empty-state" style="padding:1rem;">No history yet</div>'; return; }
+  list.innerHTML=expenses.map(e=>`
+    <div class="g-item">
+      <div class="g-dot" style="background:${CC[e.category]};margin-top:5px;"></div>
+      <div class="g-info">
+        <div class="g-name">${e.vendor||e.category}${e.recurring?'<span class="badge badge-recurring">Recurring</span>':''}</div>
+        <div class="g-meta">${timeAgo(e.time)}</div>
+        ${e.guardianComment?`<div class="g-comment"><i class="ti ti-message-2" style="font-size:11px;vertical-align:-1px;margin-right:3px;"></i>${e.guardianComment}</div>`:''}
+        ${e.appealNote?`<div class="g-comment" style="color:var(--blue)"><i class="ti ti-send" style="font-size:11px;vertical-align:-1px;margin-right:3px;"></i>User note: ${e.appealNote}</div>`:''}
+      </div>
+      <div class="g-right">
+        <div class="g-amt">$${e.amount}</div>
+        <span class="badge ${e.status==='pending'?'badge-pending':e.status==='rejected'?'badge-rejected':'badge-approved'}">${e.status}</span>
+      </div>
+    </div>`).join('');
+}
+
+function renderMonthlySummary(){
+  const now=new Date();
+  const thisM=`${now.getFullYear()}-${now.getMonth()}`;
+  const prevD=new Date(now.getFullYear(), now.getMonth()-1, 1);
+  const prevM=`${prevD.getFullYear()}-${prevD.getMonth()}`;
+  const thisApproved=expenses.filter(e=>e.status==='approved'&&expenseMonth(e)===thisM);
+  const prevApproved=expenses.filter(e=>e.status==='approved'&&expenseMonth(e)===prevM);
+  const thisTotal=thisApproved.reduce((s,e)=>s+e.amount,0);
+  const prevTotal=prevApproved.reduce((s,e)=>s+e.amount,0);
+  const thisRejected=expenses.filter(e=>e.status==='rejected'&&expenseMonth(e)===thisM).length;
+  const el=document.getElementById('monthlySummary');
+  let trendHTML='';
+  if(prevTotal>0){
+    const diff=thisTotal-prevTotal;
+    const pct=Math.round(Math.abs(diff)/prevTotal*100);
+    if(diff>0) trendHTML=`<div class="trend trend-up"><i class="ti ti-trending-up" style="vertical-align:-2px;margin-right:4px;"></i>Up $${diff} (${pct}%) from last month</div>`;
+    else if(diff<0) trendHTML=`<div class="trend trend-down"><i class="ti ti-trending-down" style="vertical-align:-2px;margin-right:4px;"></i>Down $${Math.abs(diff)} (${pct}%) from last month</div>`;
+    else trendHTML=`<div class="trend trend-same">Same as last month</div>`;
+  }
+  el.innerHTML=`
+    <div class="month-compare">
+      <div class="month-card">
+        <div class="month-card-label">This month</div>
+        <div class="month-card-val">$${thisTotal}</div>
+        <div class="month-card-sub">${thisApproved.length} approved · ${thisRejected} rejected</div>
+      </div>
+      <div class="month-card">
+        <div class="month-card-label">Last month</div>
+        <div class="month-card-val">$${prevTotal}</div>
+        <div class="month-card-sub">${prevApproved.length} approved</div>
+      </div>
+    </div>
+    ${trendHTML}`;
+}
+
+// Vendors
 function renderVendorList(){
   const l=document.getElementById('vendorList');
   if(!vendors.length){ l.innerHTML='<div style="font-size:13px;color:var(--text3);padding:8px 0;">No vendors yet.</div>'; return; }
-  l.innerHTML=vendors.map((v,i)=>`<div class="vendor-list-item"><i class="ti ${CAT_ICONS[v.category]} vl-icon" style="color:${CAT_COLORS[v.category]}"></i><div class="vl-info"><div class="vl-name">${v.name}</div><div class="vl-cat">${v.category}${v.recurring?' · Recurring':''}</div></div><button class="vl-remove" onclick="removeVendor(${i})"><i class="ti ti-trash"></i></button></div>`).join('');
+  l.innerHTML=vendors.map((v,i)=>`<div class="vendor-list-item"><i class="ti ${CI[v.category]} vl-icon" style="color:${CC[v.category]}"></i><div class="vl-info"><div class="vl-name">${v.name}</div><div class="vl-cat">${v.category}${v.recurring?' · Recurring':''}</div></div><button class="vl-remove" onclick="removeVendor(${i})"><i class="ti ti-trash"></i></button></div>`).join('');
 }
 function addVendor(){
   const name=document.getElementById('newVendorName').value.trim();
@@ -479,6 +776,7 @@ function addVendor(){
 }
 function removeVendor(i){ vendors.splice(i,1); ls.set('et_vendors',vendors); renderVendorList(); }
 
+// Settings
 function saveThreshold(){
   threshold=parseFloat(document.getElementById('thresholdInput').value)||500;
   ls.set('et_threshold',threshold); flash('thresholdMsg');
@@ -487,10 +785,6 @@ function changePass(){
   const p=document.getElementById('newGuardianPass').value;
   if(!p) return; gPass=p; ls.set('et_gpass',gPass); document.getElementById('newGuardianPass').value=''; flash('passMsg');
 }
-function flash(id){ const el=document.getElementById(id); el.style.display='block'; setTimeout(()=>el.style.display='none',2000); }
-
-function show(id){ document.getElementById(id).style.display='block'; }
-function hide(id){ document.getElementById(id).style.display='none'; }
 </script>
 </body>
 </html>

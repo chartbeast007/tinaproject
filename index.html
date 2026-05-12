@@ -1,558 +1,412 @@
+
+```
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Expense Tracker</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg-primary: #ffffff;
-      --bg-secondary: #f4f4f2;
-      --bg-tertiary: #ebebea;
-      --text-primary: #1a1a19;
-      --text-secondary: #6b6b67;
-      --text-tertiary: #9b9b97;
-      --border-light: rgba(0,0,0,0.1);
-      --border-mid: rgba(0,0,0,0.18);
-      --radius-md: 8px;
-      --radius-lg: 12px;
-      --radius-xl: 16px;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg-primary: #1c1c1a;
-        --bg-secondary: #272725;
-        --bg-tertiary: #313130;
-        --text-primary: #f0f0ee;
-        --text-secondary: #a0a09c;
-        --text-tertiary: #6b6b67;
-        --border-light: rgba(255,255,255,0.1);
-        --border-mid: rgba(255,255,255,0.18);
-      }
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: var(--bg-tertiary);
-      color: var(--text-primary);
-      min-height: 100vh;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 2rem 1rem;
-    }
-
-    .app {
-      width: 100%;
-      max-width: 480px;
-      background: var(--bg-primary);
-      border-radius: var(--radius-xl);
-      overflow: hidden;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-    }
-
-    .app-header {
-      padding: 1.25rem 1.25rem 0;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .app-header h1 {
-      font-size: 18px;
-      font-weight: 500;
-    }
-    .app-header .dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: #1D9E75;
-    }
-
-    .tab-bar {
-      display: flex;
-      border-bottom: 0.5px solid var(--border-light);
-      margin-top: 1rem;
-    }
-    .tab-button {
-      flex: 1;
-      padding: 13px 16px;
-      background: none;
-      border: none;
-      border-bottom: 2.5px solid transparent;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: color 0.15s, border-color 0.15s;
-      font-family: inherit;
-    }
-    .tab-button.active {
-      color: var(--text-primary);
-      border-bottom-color: var(--text-primary);
-    }
-    .tab-button i { font-size: 17px; vertical-align: -3px; margin-right: 5px; }
-
-    .tab-content { display: none; padding: 1.25rem; }
-    .tab-content.active { display: block; }
-
-    .balance-card {
-      background: var(--bg-secondary);
-      border-radius: var(--radius-lg);
-      padding: 1.5rem;
-      text-align: center;
-      margin-bottom: 1.25rem;
-    }
-    .balance-label { font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; }
-    .balance-amount { font-size: 44px; font-weight: 500; letter-spacing: -1px; }
-    .balance-sub { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
-
-    .add-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      width: 100%;
-      padding: 17px;
-      background: var(--text-primary);
-      color: var(--bg-primary);
-      border: none;
-      border-radius: var(--radius-lg);
-      font-size: 17px;
-      font-weight: 500;
-      cursor: pointer;
-      margin-bottom: 1.5rem;
-      transition: opacity 0.15s;
-      font-family: inherit;
-    }
-    .add-btn:hover { opacity: 0.82; }
-    .add-btn i { font-size: 22px; }
-
-    .section-label { font-size: 12px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
-
-    .expense-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 11px 0;
-      border-bottom: 0.5px solid var(--border-light);
-    }
-    .expense-item:last-child { border-bottom: none; }
-    .expense-icon {
-      width: 40px; height: 40px;
-      border-radius: var(--radius-md);
-      background: var(--bg-secondary);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px; flex-shrink: 0;
-    }
-    .expense-name { font-size: 15px; font-weight: 500; flex: 1; }
-    .expense-time { font-size: 12px; color: var(--text-tertiary); margin-top: 2px; }
-    .expense-amount { font-size: 15px; font-weight: 500; }
-
-    /* Modal */
-    .modal-backdrop {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 100;
-      align-items: flex-end;
-      justify-content: center;
-      padding: 1rem;
-    }
-    .modal-backdrop.active { display: flex; }
-    .modal {
-      background: var(--bg-primary);
-      border-radius: var(--radius-xl);
-      padding: 1.5rem;
-      width: 100%;
-      max-width: 480px;
-      max-height: 90vh;
-      overflow-y: auto;
-      animation: slideUp 0.25s ease;
-    }
-    @keyframes slideUp {
-      from { transform: translateY(30px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-    .modal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1.25rem;
-    }
-    .modal-title { font-size: 18px; font-weight: 500; }
-    .modal-close {
-      background: var(--bg-secondary);
-      border: none;
-      border-radius: 50%;
-      width: 32px; height: 32px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; cursor: pointer;
-      color: var(--text-secondary);
-    }
-
-    .modal-section-label { font-size: 13px; color: var(--text-secondary); margin-bottom: 10px; }
-
-    .category-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-bottom: 1.25rem;
-    }
-    .category-btn {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      padding: 12px 8px;
-      background: var(--bg-secondary);
-      border: 1.5px solid transparent;
-      border-radius: var(--radius-md);
-      cursor: pointer;
-      font-size: 13px;
-      color: var(--text-primary);
-      transition: border-color 0.15s;
-      font-family: inherit;
-    }
-    .category-btn i { font-size: 24px; }
-    .category-btn.selected { border-color: var(--text-primary); background: var(--bg-primary); }
-
-    .amount-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-bottom: 1.25rem;
-    }
-    .amount-btn {
-      padding: 13px 8px;
-      background: var(--bg-secondary);
-      border: 1.5px solid transparent;
-      border-radius: var(--radius-md);
-      font-size: 16px;
-      font-weight: 500;
-      cursor: pointer;
-      color: var(--text-primary);
-      transition: border-color 0.15s;
-      font-family: inherit;
-    }
-    .amount-btn.selected { border-color: var(--text-primary); background: var(--bg-primary); }
-
-    .submit-btn {
-      width: 100%;
-      padding: 15px;
-      background: var(--text-primary);
-      color: var(--bg-primary);
-      border: none;
-      border-radius: var(--radius-md);
-      font-size: 16px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: opacity 0.15s;
-      font-family: inherit;
-    }
-    .submit-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-    .submit-btn:not(:disabled):hover { opacity: 0.82; }
-
-    /* Guardian tab */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-bottom: 1.5rem;
-    }
-    .stat-card {
-      background: var(--bg-secondary);
-      border-radius: var(--radius-md);
-      padding: 1rem;
-    }
-    .stat-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
-    .stat-value { font-size: 22px; font-weight: 500; }
-
-    .cat-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 9px 0;
-      border-bottom: 0.5px solid var(--border-light);
-    }
-    .cat-row:last-child { border-bottom: none; }
-    .cat-icon { font-size: 18px; width: 24px; text-align: center; flex-shrink: 0; }
-    .cat-name { flex: 1; font-size: 14px; }
-    .cat-bar-wrap { width: 80px; height: 6px; background: var(--bg-tertiary); border-radius: 3px; overflow: hidden; flex-shrink: 0; }
-    .cat-bar { height: 100%; border-radius: 3px; }
-    .cat-amt { font-size: 14px; font-weight: 500; min-width: 44px; text-align: right; }
-
-    .alert-box {
-      background: #FAEEDA;
-      border: 0.5px solid #FAC775;
-      border-radius: var(--radius-md);
-      padding: 12px 14px;
-      font-size: 13px;
-      color: #633806;
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-      margin-bottom: 1rem;
-    }
-    .alert-box i { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
-
-    .g-expense-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 9px 0;
-      border-bottom: 0.5px solid var(--border-light);
-    }
-    .g-expense-item:last-child { border-bottom: none; }
-    .g-cat-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-    .g-expense-name { flex: 1; font-size: 14px; }
-    .g-expense-time { font-size: 12px; color: var(--text-tertiary); }
-    .g-expense-amt { font-size: 14px; font-weight: 500; }
-
-    .empty-state {
-      text-align: center;
-      padding: 2rem 1rem;
-      color: var(--text-tertiary);
-      font-size: 14px;
-    }
-    .empty-state i { font-size: 32px; display: block; margin-bottom: 8px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/tabler-icons.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            font-size: 24px;
+        }
+        .guardian-access {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .guardian-access input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .guardian-access button {
+            padding: 8px 16px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .guardian-access button:hover {
+            background: #0056b3;
+        }
+        .logout-btn {
+            background: #dc3545;
+            padding: 8px 16px;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .logout-btn:hover {
+            background: #c82333;
+        }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+        .tab-button {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-bottom: 3px solid transparent;
+            color: #666;
+        }
+        .tab-button.active {
+            color: #007bff;
+            border-bottom-color: #007bff;
+        }
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .category-btn, .amount-btn {
+            padding: 16px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .category-btn:hover, .amount-btn:hover {
+            border-color: #007bff;
+        }
+        .category-btn.selected, .amount-btn.selected {
+            background: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+        }
+        .modal-content h2 {
+            margin-bottom: 20px;
+        }
+        .modal-content button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #submitBtn {
+            background: #28a745;
+            color: white;
+        }
+        #submitBtn:hover:not(:disabled) {
+            background: #218838;
+        }
+        #submitBtn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .close-btn {
+            background: #6c757d;
+            color: white;
+        }
+        .close-btn:hover {
+            background: #5a6268;
+        }
+        .expense-list {
+            margin-top: 20px;
+        }
+        .expense-item {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .expense-item.pending {
+            background: #fff3cd;
+            border-color: #ffc107;
+        }
+        .expense-item.approved {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        .alert {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-card .label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        .stat-card .value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .vendor-list {
+            margin-top: 15px;
+        }
+        .vendor-item {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .vendor-item button {
+            padding: 4px 8px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .settings-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .settings-form label {
+            font-weight: 500;
+        }
+        .settings-form input, .settings-form select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .settings-form button {
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .settings-form button:hover {
+            background: #0056b3;
+        }
+        .add-btn {
+            background: #28a745;
+            color: white;
+        }
+        .add-btn:hover {
+            background: #218838;
+        }
+    </style>
 </head>
 <body>
-
-<div class="app">
-  <div class="app-header">
-    <div class="dot"></div>
-    <h1>Expense Tracker</h1>
-  </div>
-
-  <div class="tab-bar">
-    <button class="tab-button active" onclick="switchTab('elderly', this)">
-      <i class="ti ti-home"></i>My Spending
-    </button>
-    <button class="tab-button" onclick="switchTab('guardian', this)">
-      <i class="ti ti-shield"></i>Guardian
-    </button>
-  </div>
-
-  <div id="elderly" class="tab-content active">
-    <div class="balance-card">
-      <div class="balance-label">This month's spending</div>
-      <div class="balance-amount" id="totalDisplay">$0</div>
-      <div class="balance-sub" id="countDisplay">No expenses yet</div>
-    </div>
-
-    <button class="add-btn" onclick="openExpenseModal()">
-      <i class="ti ti-plus"></i>Add an expense
-    </button>
-
-    <div class="section-label">Recent expenses</div>
-    <div id="expenseList">
-      <div class="empty-state">
-        <i class="ti ti-receipt"></i>
-        Tap "Add an expense" to get started
-      </div>
-    </div>
-  </div>
-
-  <div id="guardian" class="tab-content">
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-label">Total this month</div>
-        <div class="stat-value" id="g-total">$0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Transactions</div>
-        <div class="stat-value" id="g-count">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Largest spend</div>
-        <div class="stat-value" id="g-largest">$0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Most frequent</div>
-        <div class="stat-value" style="font-size:16px;" id="g-frequent">—</div>
-      </div>
-    </div>
-
-    <div id="alertArea"></div>
-
-    <div style="margin-bottom: 1.5rem;">
-      <div class="section-label">By category</div>
-      <div id="g-categories">
-        <div class="empty-state" style="padding:1rem;">No data yet</div>
-      </div>
-    </div>
-
-    <div>
-      <div class="section-label">All transactions</div>
-      <div id="g-list">
-        <div class="empty-state" style="padding:1rem;">No transactions yet</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal -->
-<div id="expenseModal" class="modal-backdrop" onclick="backdropClose(event)">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal-header">
-      <span class="modal-title" id="modalTitle">Add expense</span>
-      <button class="modal-close" onclick="closeExpenseModal()" aria-label="Close">
-        <i class="ti ti-x"></i>
-      </button>
-    </div>
-
-    <div class="modal-section-label">What did you spend on?</div>
-    <div class="category-grid">
-      <button class="category-btn" onclick="selectCategory('Food', this)"><i class="ti ti-bowl-spoon"></i>Food</button>
-      <button class="category-btn" onclick="selectCategory('Transport', this)"><i class="ti ti-car"></i>Transport</button>
-      <button class="category-btn" onclick="selectCategory('Health', this)"><i class="ti ti-first-aid-kit"></i>Health</button>
-      <button class="category-btn" onclick="selectCategory('Shopping', this)"><i class="ti ti-shopping-bag"></i>Shopping</button>
-      <button class="category-btn" onclick="selectCategory('Bills', this)"><i class="ti ti-file-invoice"></i>Bills</button>
-      <button class="category-btn" onclick="selectCategory('Other', this)"><i class="ti ti-dots-circle-horizontal"></i>Other</button>
-    </div>
-
-    <div class="modal-section-label">How much?</div>
-    <div class="amount-grid">
-      <button class="amount-btn" onclick="selectAmount(5, this)">$5</button>
-      <button class="amount-btn" onclick="selectAmount(10, this)">$10</button>
-      <button class="amount-btn" onclick="selectAmount(20, this)">$20</button>
-      <button class="amount-btn" onclick="selectAmount(50, this)">$50</button>
-      <button class="amount-btn" onclick="selectAmount(100, this)">$100</button>
-      <button class="amount-btn" onclick="selectAmount(200, this)">$200</button>
-    </div>
-
-    <button class="submit-btn" id="submitBtn" disabled onclick="submitExpense()">
-      Add expense
-    </button>
-  </div>
-</div>
-
-<script>
-  const catColors = { Food:'#1D9E75', Transport:'#378ADD', Health:'#D85A30', Shopping:'#7F77DD', Bills:'#BA7517', Other:'#888780' };
-  const catIcons  = { Food:'ti-bowl-spoon', Transport:'ti-car', Health:'ti-first-aid-kit', Shopping:'ti-shopping-bag', Bills:'ti-file-invoice', Other:'ti-dots-circle-horizontal' };
-
-  let selectedCategory = null, selectedAmount = null;
-  let activeCatBtn = null, activeAmtBtn = null;
-  let expenses = JSON.parse(localStorage.getItem('expenses') || '[]').map(e => ({...e, time: new Date(e.time)}));
-
-  function save() { localStorage.setItem('expenses', JSON.stringify(expenses)); }
-
-  function switchTab(tab, btn) {
-    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.tab-button').forEach(el => el.classList.remove('active'));
-    document.getElementById(tab).classList.add('active');
-    btn.classList.add('active');
-    if (tab === 'guardian') updateGuardian();
-  }
-
-  function openExpenseModal() {
-    selectedCategory = null; selectedAmount = null; activeCatBtn = null; activeAmtBtn = null;
-    document.getElementById('expenseModal').classList.add('active');
-    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('selected'));
-    document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
-    document.getElementById('submitBtn').disabled = true;
-  }
-
-  function closeExpenseModal() { document.getElementById('expenseModal').classList.remove('active'); }
-  function backdropClose(e) { if (e.target === document.getElementById('expenseModal')) closeExpenseModal(); }
-
-  function selectCategory(cat, btn) {
-    selectedCategory = cat;
-    if (activeCatBtn) activeCatBtn.classList.remove('selected');
-    btn.classList.add('selected'); activeCatBtn = btn;
-    checkSubmit();
-  }
-  function selectAmount(amt, btn) {
-    selectedAmount = amt;
-    if (activeAmtBtn) activeAmtBtn.classList.remove('selected');
-    btn.classList.add('selected'); activeAmtBtn = btn;
-    checkSubmit();
-  }
-  function checkSubmit() { document.getElementById('submitBtn').disabled = !(selectedCategory && selectedAmount); }
-
-  function submitExpense() {
-    if (!selectedCategory || !selectedAmount) return;
-    expenses.unshift({ category: selectedCategory, amount: selectedAmount, time: new Date(), id: Date.now() });
-    save();
-    closeExpenseModal();
-    renderElderly();
-  }
-
-  function timeAgo(date) {
-    const mins = Math.round((Date.now() - new Date(date).getTime()) / 60000);
-    if (mins < 1) return 'Just now';
-    if (mins < 60) return `${mins}m ago`;
-    const hrs = Math.round(mins / 60);
-    if (hrs < 24) return `${hrs}h ago`;
-    return `${Math.round(hrs / 24)}d ago`;
-  }
-
-  function renderElderly() {
-    const total = expenses.reduce((s, e) => s + e.amount, 0);
-    document.getElementById('totalDisplay').textContent = '$' + total;
-    document.getElementById('countDisplay').textContent = expenses.length === 0 ? 'No expenses yet' : `${expenses.length} expense${expenses.length !== 1 ? 's' : ''} this month`;
-    const list = document.getElementById('expenseList');
-    if (expenses.length === 0) {
-      list.innerHTML = '<div class="empty-state"><i class="ti ti-receipt"></i>Tap "Add an expense" to get started</div>';
-      return;
-    }
-    list.innerHTML = expenses.map(e => `
-      <div class="expense-item">
-        <div class="expense-icon"><i class="ti ${catIcons[e.category]}" style="color:${catColors[e.category]}"></i></div>
-        <div style="flex:1">
-          <div class="expense-name">${e.category}</div>
-          <div class="expense-time">${timeAgo(e.time)}</div>
+    <div class="container">
+        <div class="header">
+            <h1>💰 Expense Tracker</h1>
+            <div class="guardian-access">
+                <input type="password" id="guardianPassword" placeholder="Guardian password">
+                <button onclick="loginGuardian()">Login as Guardian</button>
+                <button class="logout-btn" id="logoutBtn" style="display: none;" onclick="logoutGuardian()">Logout</button>
+            </div>
         </div>
-        <div class="expense-amount">$${e.amount}</div>
-      </div>`).join('');
-  }
 
-  function updateGuardian() {
-    const total = expenses.reduce((s, e) => s + e.amount, 0);
-    const largest = expenses.length ? Math.max(...expenses.map(e => e.amount)) : 0;
-    const catTotals = {};
-    expenses.forEach(e => { catTotals[e.category] = (catTotals[e.category] || 0) + e.amount; });
-    const freqMap = expenses.reduce((acc, e) => { acc[e.category] = (acc[e.category]||0)+1; return acc; }, {});
-    const mostFreq = Object.entries(freqMap).sort((a,b)=>b[1]-a[1])[0];
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('elderly')">Elderly User</button>
+            <button class="tab-button" id="guardianTabBtn" onclick="switchTab('guardian')" style="display: none;">Guardian Dashboard</button>
+            <button class="tab-button" id="settingsTabBtn" onclick="switchTab('settings')" style="display: none;">Settings</button>
+            <button class="tab-button" id="pendingTabBtn" onclick="switchTab('pending')" style="display: none;">Pending Approvals</button>
+        </div>
 
-    document.getElementById('g-total').textContent = '$' + total;
-    document.getElementById('g-count').textContent = expenses.length;
-    document.getElementById('g-largest').textContent = '$' + largest;
-    document.getElementById('g-frequent').textContent = mostFreq ? mostFreq[0] : '—';
+        <!-- Elderly User Interface -->
+        <div id="elderly" class="tab-content active">
+            <h2>Add Expense</h2>
+            <button onclick="openExpenseModal()" style="padding: 12px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px;">+ Add Expense</button>
+            
+            <div class="expense-list">
+                <h3>Recent Expenses</h3>
+                <div id="elderlyExpenseList"></div>
+            </div>
+        </div>
 
-    document.getElementById('alertArea').innerHTML = largest >= 100
-      ? `<div class="alert-box"><i class="ti ti-alert-triangle"></i><span>Large expense detected: $${largest} on ${expenses.find(e=>e.amount===largest)?.category}. Please review if expected.</span></div>`
-      : '';
+        <!-- Guardian Dashboard -->
+        <div id="guardian" class="tab-content">
+            <h2>Guardian Dashboard</h2>
+            <div id="guardianAlert"></div>
+            
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <div class="label">Total Spent</div>
+                    <div class="value" id="totalSpent">$0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Transactions</div>
+                    <div class="value" id="transactionCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Largest Purchase</div>
+                    <div class="value" id="largestPurchase">$0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Pending Count</div>
+                    <div class="value" id="pendingCount">0</div>
+                </div>
+            </div>
 
-    const maxAmt = Math.max(...Object.values(catTotals), 1);
-    const catEl = document.getElementById('g-categories');
-    catEl.innerHTML = Object.keys(catTotals).length === 0
-      ? '<div class="empty-state" style="padding:1rem;">No data yet</div>'
-      : Object.entries(catTotals).sort((a,b)=>b[1]-a[1]).map(([cat, amt]) => `
-          <div class="cat-row">
-            <i class="ti ${catIcons[cat]} cat-icon" style="color:${catColors[cat]}"></i>
-            <span class="cat-name">${cat}</span>
-            <div class="cat-bar-wrap"><div class="cat-bar" style="width:${Math.round(amt/maxAmt*100)}%;background:${catColors[cat]}"></div></div>
-            <span class="cat-amt">$${amt}</span>
-          </div>`).join('');
+            <h3>All Expenses</h3>
+            <div id="guardianExpenseList"></div>
+        </div>
 
-    document.getElementById('g-list').innerHTML = expenses.length === 0
-      ? '<div class="empty-state" style="padding:1rem;">No transactions yet</div>'
-      : expenses.map(e => `
-          <div class="g-expense-item">
-            <div class="g-cat-dot" style="background:${catColors[e.category]}"></div>
-            <span class="g-expense-name">${e.category}</span>
-            <span class="g-expense-time">${timeAgo(e.time)}</span>
-            <span class="g-expense-amt">$${e.amount}</span>
-          </div>`).join('');
-  }
+        <!-- Settings Tab -->
+        <div id="settings" class="tab-content">
+            <h2>Guardian Settings</h2>
+            <div class="settings-form">
+                <div>
+                    <label>Alert Threshold ($)</label>
+                    <input type="number" id="alertThreshold" min="50" step="50" value="500">
+                </div>
 
-  renderElderly();
-</script>
-</body>
-</html>
+                <div>
+                    <label>Pre-approved Vendors</label>
+                    <div style="margin-top: 10px;">
+                        <input type="text" id="newVendor" placeholder="Enter vendor name" style="width: calc(100% - 100px); margin-right: 10px;">
+                        <button class="add-btn" onclick="addVendor()" style="width: 80px;">Add</button>
+                    </div>
+                    <div class="vendor-list" id="vendorList"></div>
+                </div>
+
+                <button onclick="saveSettings()" style="background: #28a745;">Save Settings</button>
+            </div>
+        </div>
+
+        <!-- Pending Approvals Tab -->
+        <div id="pending" class="tab-content">
+            <h2>Pending Approvals</h2>
+            <div id="pendingList"></div>
+        </div>
+    </div>
+
+    <!-- Expense Modal -->
+    <div id="expenseModal" class="modal">
+        <div class="modal-content">
+            <h2>Add Expense</h2>
+            
+            <div>
+                <label style="display: block; margin-bottom: 10px; font-weight: 500;">Category</label>
+                <div class="button-grid">
+                    <button class="category-btn" onclick="selectCategory('Food')">🍔 Food</button>
+                    <button class="category-btn" onclick="selectCategory('Transport')">🚗 Transport</button>
+                    <button class="category-btn" onclick="selectCategory('Health')">🏥 Health</button>
+                    <button class="category-btn" onclick="selectCategory('Shopping')">🛍️ Shopping</button>
+                    <button class="category-btn" onclick="selectCategory('Bills')">📄 Bills</button>
+                    <button class="category-btn" onclick="selectCategory('Other')">📌 Other</button>
+                </div>
+            </div>
+
+            <div>
+                <label style="display: block; margin-bottom: 10px; font-weight: 500;">Vendor (optional)</label>
+                <select id="vendorSelect" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                    <option value="">Custom vendor</option>
+                </select>
+                <input type="text" id="customVendor" placeholder="Enter vendor name" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; margin-top: 10px;">
+            </div>
+
+            <div>
+                <label style="display: block; margin-bottom: 10px; font-weight: 500;">Amount</label>
+                <div class="button-grid">
+                    <button class="amount-btn" onclick="selectAmount(20)">$20</button>
+                    <button class="amount-btn" onclick="selectAmount(50)">$50</button>
+                    <button class="amount-btn" onclick="selectAmount(100)">$100</button>
+                    <button class="amount-btn" onclick="selectAmount(200)">$200</button>
+                </div>
+                <input type="number" id="customAmount" placeholder="Custom amount" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; margin-top: 10px;">
+            </div>
+
+            <div>
+                <label style="display: flex; align-items: center; gap: 10px;">
+                    <input type="checkbox" id="recurringCheckbox">
+                    Recurring expense?
+                </label>
+            </div>
+
+            <button id="submitBtn" onclick="submitExpense()" disabled style="width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 15px;">Submit</button>
+            <button class="close-btn" onclick="closeExpenseModal()" style="width: 100%; padding:
